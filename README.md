@@ -139,9 +139,22 @@ Breakdown of Each Approach:
 - Secure data transmission
 - Follow platform security guidelines
 
+## ADB
+
+ADB stands for Android Debug Bridge, a versatile command-line tool that lets you communicate with an emulator instance or connected Android device. It is a client-server program that includes three components:
+
+- A client, which runs on your development machine
+- A daemon (adbd), which runs on the device
+- A server, which manages communication between the client and the daemon
+  The client sends commands to the server, which forwards them to the daemon running on the device. The daemon executes the commands and returns the results to the client.
+  The ADB client can be used to perform various tasks, such as installing and debugging apps, copying files, and running shell commands on the device. The ADB server manages communication between the client and the daemon, ensuring that commands are executed correctly.
+
+[Android Debug Bridge](https://developer.android.com/studio/command-line/adb)
+
 ## React Native
 
 [Expo: Template to Setup](https://docs.expo.dev/more/create-expo/#--template)
+[React Native: Setup](https://reactnative.dev/docs/set-up-your-environment)
 
 ```bash
 npx create-expo-app --template blank-typescript
@@ -151,8 +164,28 @@ npx create-expo-app --template blank-typescript
 
 #### Running with emulator
 
-Setup expo (with android studio device)
+[Android studio](https://docs.expo.dev/workflow/android-studio-emulator/)
 
 #### Running On device (sudo needed)
 
 [ReactNative - Running on Device](https://reactnative.dev/docs/running-on-device)
+
+Setup adb and run the following commands:
+
+```bash
+# Show devices and start adb daemon if not running
+adb devices
+```
+
+```bash
+# Allow connections from the device to the host machine
+# (useful for debugging)
+adb reverse tcp:8081 tcp:8081
+```
+
+```bash
+# Allow connections for the Expo Go app
+adb reverse tcp:8087 tcp:8087
+```
+
+Start the React Native server:
