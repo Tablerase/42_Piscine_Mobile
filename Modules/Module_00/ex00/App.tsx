@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, Button, TouchableOpacity } from "react-native";
 import { StrictMode } from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function App() {
   return (
@@ -15,23 +15,25 @@ function Main() {
     <View style={styles.container}>
       <Text
         style={{
-          fontSize: 30,
+          fontSize: 20,
           fontWeight: "bold",
-          color: "orange",
+          color: "#6200ee",
           marginBottom: 20,
         }}
       >
         Hello There 🖐️
       </Text>
       <TouchableOpacity
+        onPress={() => {
+          console.log("Button Pressed");
+        }}
         style={{
-          backgroundColor: "orange",
+          backgroundColor: "#6200ee",
           padding: 10,
           borderRadius: 5,
         }}
-        onPress={() => console.log("Button is pressed !")}
       >
-        <Text style={{ color: "white", textAlign: "center" }}>Press me</Text>
+        <Text style={{ color: "#fff" }}>Press Me</Text>
       </TouchableOpacity>
       <StatusBar style="auto" />
     </View>

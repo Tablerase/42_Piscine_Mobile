@@ -139,6 +139,11 @@ Breakdown of Each Approach:
 - Secure data transmission
 - Follow platform security guidelines
 
+## Typescript
+
+[Typescript](https://www.typescriptlang.org/docs/)
+[Typescript - React Cheatsheets](https://github.com/typescript-cheatsheets/react)
+
 ## ADB
 
 ADB stands for Android Debug Bridge, a versatile command-line tool that lets you communicate with an emulator instance or connected Android device. It is a client-server program that includes three components:
@@ -153,11 +158,26 @@ ADB stands for Android Debug Bridge, a versatile command-line tool that lets you
 
 ## React Native
 
-[Expo: Template to Setup](https://docs.expo.dev/more/create-expo/#--template)
 [React Native: Setup](https://reactnative.dev/docs/set-up-your-environment)
+[ReactNative - recommandation for Expo](https://reactnative.dev/blog/2024/06/25/use-a-framework-to-build-react-native-apps)
+[Expo: Template to Setup](https://docs.expo.dev/more/create-expo/#--template)
 
 ```bash
+# Create a new Expo app with TypeScript template and blank file structure
 npx create-expo-app --template blank-typescript
+```
+
+or
+
+```bash
+# Create a new Expo app with TypeScript template and file structure
+npx create-expo-app@latest
+```
+
+with React Native CLI:
+
+```bash
+npx @react-native-community/cli@latest init project_name
 ```
 
 ### Running
@@ -178,14 +198,28 @@ adb devices
 ```
 
 ```bash
-# Allow connections from the device to the host machine
-# (useful for debugging)
+# (useful for debugging with Metro Bundler and React Native DevTools)
+# This command allows the device to connect to the host machine on port 8081
 adb reverse tcp:8081 tcp:8081
-```
-
-```bash
-# Allow connections for the Expo Go app
+# and or
 adb reverse tcp:8087 tcp:8087
 ```
 
-Start the React Native server:
+Start the Expo server:
+
+```bash
+npx expo start
+```
+
+Start with React Native CLI (better adb - no error with debugger):
+
+```bash
+# JS build tool for ReactNative - Metro
+npm start
+```
+
+```bash
+# in another terminal
+# Build and run the app
+npm run android
+```
