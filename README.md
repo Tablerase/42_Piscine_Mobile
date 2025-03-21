@@ -186,7 +186,7 @@ npx @react-native-community/cli@latest init project_name
 
 [Android studio](https://docs.expo.dev/workflow/android-studio-emulator/)
 
-#### Running On device (sudo needed)
+#### Running on device (sudo needed)
 
 [ReactNative - Running on Device](https://reactnative.dev/docs/running-on-device)
 
@@ -222,4 +222,83 @@ npm start
 # in another terminal
 # Build and run the app
 npm run android
+```
+
+### File structure
+
+[ReactNative - Typescript](https://reactnative.dev/docs/typescript)
+
+Medium Project Structure:
+
+```tree
+.
+├── android
+│   └── ...
+├── ios
+│   └── ...
+├── App.tsx
+├── app.json
+├── assets
+│   ├── icon.png
+│   └── splash.png
+├── components
+│   ├── Buttons
+│   │   ├── SquareButton.tsx
+│   └── Cards
+│       ├── Card.tsx
+│       └── CardItem.tsx
+├── constants
+│   ├── Colors.ts
+│   └── Layout.ts
+├── hooks
+│   ├── useFetch.ts
+│   └── useTheme.ts
+├── navigation
+│   ├── AppNavigator.tsx
+│   └── NavigationContainer.tsx
+├── pages
+│   ├── HomePage.tsx
+│   ├── DetailsPage.tsx
+│   └── SettingsPage.tsx
+├── services
+│   ├── api.ts
+│   └── auth.ts
+├── styles
+│   ├── GlobalStyles.ts
+│   └── Theme.ts
+├── utils
+│   ├── formatDate.ts
+│   └── validateInput.ts
+├── __tests__
+│   ├── App.test.tsx
+│   ├── components
+│   │   ├── Buttons
+│   │   │   ├── SquareButton.test.tsx
+│   │   └── Cards
+│   │       ├── Card.test.tsx
+│   │       └── CardItem.test.tsx
+│   └── ...
+├── node_modules
+│   └── ...
+└── ...
+```
+
+Large project structure:
+
+```tree
+MyApp
+├── modules
+│   ├── accounts
+│   │   ├── components
+│   │   ├── pages
+│   │   └── ...
+│   ├── growth
+│   │   ├── components
+│   │   ├── pages
+│   │   └── ...
+│   └── shared
+│       ├── components
+│       ├── hooks
+│       └── ...
+└── App.js
 ```
