@@ -180,6 +180,12 @@ with React Native CLI:
 npx @react-native-community/cli@latest init project_name
 ```
 
+### Requirements
+
+- Node.js (LTS version recommended)
+- Java Development Kit (JDK): https://adoptium.net/installation/linux/
+- Android SDK: https://developer.android.com/studio/install
+
 ### Running
 
 #### Running with emulator
