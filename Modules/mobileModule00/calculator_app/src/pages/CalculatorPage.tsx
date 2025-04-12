@@ -87,46 +87,86 @@ const CalculatorPage = () => {
   };
 
   const handleDecimalPress = (decimal: string) => {
-    if (!expression.includes('.')) {
+    // Get the current number being entered (after the last operator)
+    const operators = ['+', '-', '*', '/'];
+    let lastOperatorIndex = -1;
+
+    // Find the last operator in the expression
+    for (const op of operators) {
+      const index = expression.lastIndexOf(op);
+      if (index > lastOperatorIndex) {
+        // Skip if this is a negative sign for a number, not an operator
+        if (
+          op === '-' &&
+          index > 0 &&
+          operators.includes(expression[index - 1])
+        ) {
+          continue;
+        }
+        lastOperatorIndex = index;
+      }
+    }
+
+    // Get the current number (portion after the last operator)
+    const currentNumber = expression.substring(lastOperatorIndex + 1);
+
+    // Only add decimal if the current number doesn't already have one
+    if (!currentNumber.includes('.')) {
       setExpression(prev => prev + decimal);
     }
   };
 
-  // Safely evaluate a mathematical expression
-  // TODO: Handling of negative numbers
   const safeEvaluate = (expr: string): number => {
-    // Convert expression to number if it's just a number
     if (!isNaN(Number(expr))) {
       return Number(expr);
     }
 
-    // Parse and evaluate the expression safely
     try {
-      // Split the expression by operators and parse
-      const parts = expr.match(/(\d+\.?\d*|\.\d+|[-+*/])/g) || [];
-      console.log('Parsed parts:', parts);
+      // Split the expression by operators and numbers, recognizing negative numbers
+      const parts = expr.match(/([+\-*/])|([0-9]+\.?[0-9]*|\.[0-9]+)/g) || [];
+      console.log('Init Parsed parts:', parts);
       if (parts.length === 0) {
         return 0;
       }
 
-      // Process multiplication and division first
+      // Process the parts to handle negative numbers
+      const processedParts = [];
+      for (let i = 0; i < parts.length; i++) {
+        // If we have a minus sign that is preceded by another operator or is at the start,
+        // it's a negative sign for the next number
+        if (parts[i] === '-' && (i === 0 || /[+\-*/]/.test(parts[i - 1]))) {
+          // Combine the negative sign with the next number
+          if (i + 1 < parts.length && /[0-9]/.test(parts[i + 1][0])) {
+            processedParts.push('-' + parts[i + 1]);
+            i++; // Skip the next number as we've combined it
+          } else {
+            processedParts.push(parts[i]);
+          }
+        } else {
+          processedParts.push(parts[i]);
+        }
+      }
+      console.log('Neg Parsed parts:', processedParts);
+
+      // Now process multiplication and division
       let i = 1;
-      while (i < parts.length) {
-        if (parts[i] === '*' || parts[i] === '/') {
-          const left = parseFloat(parts[i - 1]);
-          const right = parseFloat(parts[i + 1]);
-          const result = parts[i] === '*' ? left * right : left / right;
-          parts.splice(i - 1, 3, result.toString());
+      while (i < processedParts.length) {
+        if (processedParts[i] === '*' || processedParts[i] === '/') {
+          const left = parseFloat(processedParts[i - 1]);
+          const right = parseFloat(processedParts[i + 1]);
+          const result =
+            processedParts[i] === '*' ? left * right : left / right;
+          processedParts.splice(i - 1, 3, result.toString());
         } else {
           i += 2;
         }
       }
 
       // Process addition and subtraction
-      let result = parseFloat(parts[0]);
-      for (i = 1; i < parts.length; i += 2) {
-        const operator = parts[i];
-        const valueOp = parseFloat(parts[i + 1]);
+      let result = parseFloat(processedParts[0]);
+      for (i = 1; i < processedParts.length; i += 2) {
+        const operator = processedParts[i];
+        const valueOp = parseFloat(processedParts[i + 1]);
         if (operator === '+') {
           result += valueOp;
         } else if (operator === '-') {
@@ -142,14 +182,29 @@ const CalculatorPage = () => {
   };
 
   const handleOperator = (op: string) => {
-    if (expression !== '0') {
-      setExpression(prev => prev + op);
+    // Handle empty expression or just a zero
+    if (expression === '0' && op === '-') {
+      setExpression('-');
+      return;
+    }
+
+    // Allow minus after an operator for negative numbers
+    const lastChar = expression[expression.length - 1];
+    if (['+', '-', '*', '/'].includes(lastChar)) {
+      if (op === '-') {
+        // Allow consecutive minus for negative number after operator
+        setExpression(expression + op);
+      } else {
+        // Replace last operator with new one
+        setExpression(expression.slice(0, -1) + op);
+      }
+    } else {
+      setExpression(expression + op);
     }
   };
 
   useEffect(() => {
-    const currentExpression = expression;
-    const currentResult = safeEvaluate(currentExpression);
+    const currentResult = safeEvaluate(expression);
     setValue(currentResult);
   }, [expression]);
 
