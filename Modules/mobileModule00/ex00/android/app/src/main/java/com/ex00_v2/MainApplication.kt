@@ -1,4 +1,4 @@
-package com.ex00_v2
+package com.ex00
 
 import android.app.Application
 import com.facebook.react.PackageList
