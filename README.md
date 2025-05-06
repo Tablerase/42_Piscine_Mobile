@@ -354,3 +354,11 @@ Babel is a JavaScript compiler that allows you to use the latest JavaScript feat
 
 [Configuring Babel](https://babeljs.io/docs/config-files/)
 [ReactNative - Babel](https://reactnative.dev/docs/babel)
+
+## Testing
+
+### Testing with Jest
+
+[Jest](https://jestjs.io/docs/getting-started)
+[Jest - ReactNative](https://jestjs.io/docs/tutorial-react-native)
+[Jest - Snapshot Testing](https://jestjs.io/docs/snapshot-testing)
