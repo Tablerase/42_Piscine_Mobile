@@ -309,6 +309,30 @@ MyApp
 └── App.js
 ```
 
+### Layout
+
+[ReactNative - Layout - FlexBox](https://reactnative.dev/docs/flexbox)
+[ReactNative - Style](https://reactnative.dev/docs/style)
+
+### Icons
+
+[ReactNative - Icons](https://oblador.github.io/react-native-vector-icons/)
+
+```bash
+# Install react-native-vector-icons
+npm install react-native-vector-icons
+```
+
+#### List of Icons
+
+- [List of Icons](https://oblador.github.io/react-native-vector-icons/)
+- [Material Design Icons](https://pictogrammers.com/library/mdi/)
+
+### Gestures
+
+[ReactNative - Gesture Handler](https://docs.swmansion.com/react-native-gesture-handler/docs/)
+[Gesture Handler - States](https://docs.swmansion.com/react-native-gesture-handler/docs/fundamentals/states-events)
+
 ### React Native CLI
 
 #### Metro Bundler
@@ -327,3 +351,6 @@ Gradle is a build automation tool used by Android Studio to compile and package 
 #### Babel
 
 Babel is a JavaScript compiler that allows you to use the latest JavaScript features in your React Native applications. It transforms modern JavaScript code into a version that is compatible with older devices and browsers, ensuring that your app runs smoothly across different platforms.
+
+[Configuring Babel](https://babeljs.io/docs/config-files/)
+[ReactNative - Babel](https://reactnative.dev/docs/babel)
