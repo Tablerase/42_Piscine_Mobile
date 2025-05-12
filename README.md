@@ -362,3 +362,11 @@ Babel is a JavaScript compiler that allows you to use the latest JavaScript feat
 [Jest](https://jestjs.io/docs/getting-started)
 [Jest - ReactNative](https://jestjs.io/docs/tutorial-react-native)
 [Jest - Snapshot Testing](https://jestjs.io/docs/snapshot-testing)
+
+## API
+
+### Geolocation API
+
+- [Open Meteo](https://open-meteo.com/en/docs):
+  - [Non commercial - Open Meteo - Geocoding API](https://open-meteo.com/en/docs/geocoding-api#api_documentation)
+  - [Non commercial - Open Meteo - Weather API](https://open-meteo.com/en/docs)
