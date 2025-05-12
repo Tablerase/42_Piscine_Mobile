@@ -3,7 +3,7 @@ import {useEffect, useState} from 'react';
 /**
  * Represents a single location result from the Geocoding API.
  */
-interface GeocodingLocation {
+export interface GeocodingLocation {
   id: number;
   name: string;
   latitude: number;

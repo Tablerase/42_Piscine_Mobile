@@ -1,7 +1,28 @@
 import {useAppContext} from '@contexts/AppContext';
-import {useCitiesList} from '@hooks/useCitiesList';
+import {GeocodingLocation, useCitiesList} from '@hooks/useCitiesList';
 import {theme} from '@styles/theme';
-import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
+import {
+  ActivityIndicator,
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+
+const CityButton = (city: GeocodingLocation) => {
+  const handlePress = () => {
+    console.log('test');
+  };
+
+  return (
+    <TouchableOpacity onPress={handlePress} style={styles.cityButton}>
+      <Text style={styles.cityButtonText}>
+        {city.name}, {city.admin1}, {city.country}
+      </Text>
+    </TouchableOpacity>
+  );
+};
 
 export const SearchList = () => {
   const {cityField, setCitySearchStatus, setLocation} = useAppContext();
@@ -17,11 +38,8 @@ export const SearchList = () => {
   return (
     <>
       <View style={styles.container}>
-        {/* TODO: Button to select the city */}
-        {cities.map((city, idx) => (
-          <Text key={idx}>
-            {city.name}, {city.admin1}, {city.country}
-          </Text>
+        {cities.map(cityIdx => (
+          <CityButton {...cityIdx} />
         ))}
       </View>
     </>
@@ -31,5 +49,16 @@ export const SearchList = () => {
 const styles = StyleSheet.create({
   container: {
     alignContent: 'center',
+    marginTop: 5,
+    gap: 5,
+  },
+  cityButton: {
+    backgroundColor: theme.colors.primary + 'AA',
+    padding: 10,
+    borderRadius: 10,
+  },
+  cityButtonText: {
+    color: 'white',
+    fontWeight: '700',
   },
 });
