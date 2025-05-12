@@ -1,19 +1,13 @@
-import {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {BottomBar} from '@components/BottomBar';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 import {Forecast} from '@components/Forecast';
 import {SearchBar} from '@components/SearchBar';
-
-enum Page {
-  Currently = 'Currently',
-  Today = 'Today',
-  Weekly = 'Weekly',
-}
+import {Page, useAppContext} from '@contexts/AppContext';
+import {SearchList} from '@components/SearchList';
 
 const Main = () => {
-  const [page, setPage] = useState<Page>(Page.Currently);
-  const [location, setLocation] = useState<string>('');
+  const {page, setPage, citySearchStatus} = useAppContext();
 
   const PAGES = [Page.Currently, Page.Today, Page.Weekly];
   const SWIPE_DISTANCE_THRESHOLD = 100;
@@ -37,10 +31,10 @@ const Main = () => {
 
   return (
     <>
-      <SearchBar searchText={location} setSearchText={setLocation} />
+      <SearchBar />
       <GestureDetector gesture={swipPanGesture}>
         <View style={styles.container}>
-          <Forecast period={page} location={location} />
+          {citySearchStatus === false ? <Forecast /> : <SearchList />}
         </View>
       </GestureDetector>
       <BottomBar page={page} setPage={newPage => setPage(newPage as Page)} />

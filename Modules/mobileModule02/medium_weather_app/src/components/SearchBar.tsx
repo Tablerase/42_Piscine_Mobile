@@ -1,4 +1,10 @@
+import {useAppContext} from '@contexts/AppContext';
+/**
+ * Geolocation Lib info: https://github.com/michalchudziak/react-native-geolocation
+ */
+import Geolocation from '@react-native-community/geolocation';
 import {theme} from '@styles/theme';
+import {useEffect} from 'react';
 import {
   StatusBar,
   StyleSheet,
@@ -8,19 +14,21 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-interface searchBarProps {
-  searchText: string;
-  setSearchText: (location: string) => void;
-}
+const SearchField = () => {
+  const {cityField, setCityField, setCitySearchStatus} = useAppContext();
 
-const SearchField = ({searchText, setSearchText}: searchBarProps) => {
+  const setSearchText = (city: string) => {
+    setCityField(city);
+    setCitySearchStatus(true);
+  };
+
   return (
     <>
       <View style={styles.searchField}>
         <Icon name="map-search" size={20} />
         <TextInput
           placeholder="Search location..."
-          value={searchText}
+          value={cityField}
           onChangeText={setSearchText}
           style={styles.textInput}
         />
@@ -29,10 +37,30 @@ const SearchField = ({searchText, setSearchText}: searchBarProps) => {
   );
 };
 
-const GeolocationButton = ({searchText, setSearchText}: searchBarProps) => {
+const GeolocationButton = () => {
+  const {setLocation, setLocationPerm, setCityField, setCitySearchStatus} =
+    useAppContext();
+
+  useEffect(() => {
+    handlePress();
+  }, []);
+
   const handlePress = () => {
-    setSearchText('Geolocation');
-    console.log('Location: ', searchText);
+    setCitySearchStatus(false);
+    setCityField('');
+    Geolocation.getCurrentPosition(
+      pos => {
+        setLocation(pos);
+        setLocationPerm(true);
+        console.log(pos);
+      },
+      error => {
+        console.log(error);
+        if (error.PERMISSION_DENIED) {
+          setLocationPerm(false);
+        }
+      },
+    );
   };
 
   return (
@@ -44,17 +72,14 @@ const GeolocationButton = ({searchText, setSearchText}: searchBarProps) => {
   );
 };
 
-export const SearchBar = ({searchText, setSearchText}: searchBarProps) => {
+export const SearchBar = () => {
   return (
     <>
       <StatusBar backgroundColor={theme.colors.primary} />
       <View style={styles.container}>
-        <SearchField searchText={searchText} setSearchText={setSearchText} />
+        <SearchField />
         <View style={styles.separator} />
-        <GeolocationButton
-          searchText={searchText}
-          setSearchText={setSearchText}
-        />
+        <GeolocationButton />
       </View>
     </>
   );

@@ -333,6 +333,105 @@ npm install react-native-vector-icons
 [ReactNative - Gesture Handler](https://docs.swmansion.com/react-native-gesture-handler/docs/)
 [Gesture Handler - States](https://docs.swmansion.com/react-native-gesture-handler/docs/fundamentals/states-events)
 
+### Permissions
+
+```mermaid
+flowchart TD
+    Start([Start]) --> Check{Check Permission<br/>Status}
+
+    Check -->|GRANTED| Success([Permission Granted])
+    Check -->|DENIED| ShowRationale{Show Rationale<br/>Dialog?}
+    Check -->|NEVER_ASK_AGAIN| Settings([Direct to App<br/>Settings])
+
+    ShowRationale -->|Yes| Request[Request Permission]
+    ShowRationale -->|No| HandleDenial([Handle Denied<br/>State])
+
+    Request --> Check
+
+    Settings --> OpenSettings[Open App Settings]
+    OpenSettings --> Restart([App Auto-Restarts])
+    Restart --> Check
+
+    classDef decision fill:#f9f,stroke:#333,stroke-width:2px,color:#000
+    classDef action fill:#bbf,stroke:#333,stroke-width:2px,color:#000
+    classDef terminal fill:#bfb,stroke:#333,stroke-width:2px,color:#000
+
+    class Check,ShowRationale decision
+    class Request,OpenSettings,Restart action
+    class Success,HandleDenial terminal
+```
+
+[ReactNative - Permissions](https://reactnative.dev/docs/permissionsandroid)
+
+#### Permissions - Android
+
+[Android - Permissions](https://developer.android.com/training/permissions/requesting)
+
+In Android, permissions are defined in the `AndroidManifest.xml` file. This file is located in the `android/app/src/main` directory of your React Native project. You can add permissions by including `<uses-permission>` tags within the `<manifest>` tag. Here is an example of how to add permissions in the `AndroidManifest.xml` file:
+
+```xml
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.app">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+    <!-- Add permissions here -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+</manifest>
+```
+
+#### Permissions - iOS
+
+[Apple - Permissions - iOS - Info.plist](https://developer.apple.com/documentation/bundleresources/information_property_list)
+[Apple - Permissions - iOS - Info.plist - Localization](https://developer.apple.com/documentation/bundleresources/protected-resources#Location)
+
+In iOS, permissions are defined in the `Info.plist` file. This file is located in the `ios/[YourProjectName]/` directory of your React Native project. You can add permissions by including specific keys and their corresponding usage descriptions. Here is an example of how to add permissions in the `Info.plist` file:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleDisplayName</key>
+    <string>YourAppName</string>
+    <key>CFBundleIdentifier</key>
+    <string>com.example.app</string>
+    <key>CFBundleVersion</key>
+    <string>1.0</string>
+    <key>CFBundleShortVersionString</key>
+    <string>1.0</string>
+
+    <!-- Add permissions here -->
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>This app requires access to your location.</string>
+
+     <!-- Other keys and values -->
+</dict>
+</plist>
+```
+
+### Geolocation
+
+[React Native Community - Geolocation](https://github.com/michalchudziak/react-native-geolocation)
+
 ### React Native CLI
 
 #### Metro Bundler
@@ -365,7 +464,7 @@ Babel is a JavaScript compiler that allows you to use the latest JavaScript feat
 
 ## API
 
-### Geolocation API
+### Geolocation/Geocode API
 
 - [Open Meteo](https://open-meteo.com/en/docs):
   - [Non commercial - Open Meteo - Geocoding API](https://open-meteo.com/en/docs/geocoding-api#api_documentation)

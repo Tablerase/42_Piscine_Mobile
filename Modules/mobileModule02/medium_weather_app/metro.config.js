@@ -17,6 +17,9 @@ const config = {
           if (typeof name === 'string' && name.startsWith('@pages')) {
             return path.join(__dirname, 'src/pages');
           }
+          if (typeof name === 'string' && name.startsWith('@contexts')) {
+            return path.join(__dirname, 'src/contexts');
+          }
           if (typeof name === 'string' && name.startsWith('@components')) {
             return path.join(__dirname, 'src/components');
           }
