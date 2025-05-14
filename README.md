@@ -185,6 +185,9 @@ npx @react-native-community/cli@latest init project_name
 - Node.js (LTS version recommended)
 - Java Development Kit (JDK): https://adoptium.net/installation/linux/
 - Android SDK: https://developer.android.com/studio/install
+- Watchman: https://facebook.github.io/watchman/docs/install
+
+Use `npx react-native doctor` to check your environment.
 
 ### Running
 
