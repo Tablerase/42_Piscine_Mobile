@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     alignItems: 'center',
-    backgroundColor: theme.colors.primary + 'AA',
+    backgroundColor: theme.colors.primary,
   },
   tabButton: {
     alignItems: 'center',

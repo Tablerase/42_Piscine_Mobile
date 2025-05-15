@@ -1,9 +1,9 @@
-import {useAppContext} from '@contexts/AppContext';
+import {Position, useAppContext} from '@contexts/AppContext';
 import {GeocodingLocation, useCitiesList} from '@hooks/useCitiesList';
 import {theme} from '@styles/theme';
+import {useState} from 'react';
 import {
   ActivityIndicator,
-  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -11,13 +11,36 @@ import {
 } from 'react-native';
 
 const CityButton = (city: GeocodingLocation) => {
+  const {setCitySearchStatus, setLocation} = useAppContext();
+  const [isPressed, setIsPressed] = useState(false);
   const handlePress = () => {
-    console.log('test');
+    setLocation({
+      name: city.name,
+      region: city.admin1,
+      country: city.country,
+      coords: {
+        latitude: city.latitude,
+        longitude: city.longitude,
+      },
+    } as Position);
+    setCitySearchStatus(false);
   };
 
   return (
-    <TouchableOpacity onPress={handlePress} style={styles.cityButton}>
-      <Text style={styles.cityButtonText}>
+    <TouchableOpacity
+      onPress={handlePress}
+      onPressIn={() => {
+        setIsPressed(true);
+      }}
+      onPressOut={() => {
+        setIsPressed(false);
+      }}
+      style={[styles.cityButton, isPressed && styles.CityButtonPressed]}>
+      <Text
+        style={[
+          styles.cityButtonText,
+          isPressed && styles.cityButtonTextActive,
+        ]}>
         {city.name}, {city.admin1}, {city.country}
       </Text>
     </TouchableOpacity>
@@ -25,7 +48,7 @@ const CityButton = (city: GeocodingLocation) => {
 };
 
 export const SearchList = () => {
-  const {cityField, setCitySearchStatus, setLocation} = useAppContext();
+  const {cityField} = useAppContext();
   const {cities, loading, error} = useCitiesList(cityField);
 
   if (loading) {
@@ -38,8 +61,17 @@ export const SearchList = () => {
   return (
     <>
       <View style={styles.container}>
-        {cities.map(cityIdx => (
-          <CityButton {...cityIdx} />
+        {cities.map((city: GeocodingLocation, index: number) => (
+          <CityButton
+            key={`${
+              city.id ??
+              `${city.name.replace(/[^a-z0-9]/gi, '')}-${city.admin1?.replace(
+                /[^a-z0-9]/gi,
+                '',
+              )}-${city.country.replace(/[^a-z0-9]/gi, '')}-${index}`
+            }`}
+            {...city}
+          />
         ))}
       </View>
     </>
@@ -53,12 +85,20 @@ const styles = StyleSheet.create({
     gap: 5,
   },
   cityButton: {
-    backgroundColor: theme.colors.primary + 'AA',
+    backgroundColor: theme.colors.primary,
     padding: 10,
     borderRadius: 10,
+  },
+  CityButtonPressed: {
+    backgroundColor: theme.colors.secondary,
+    padding: 14,
   },
   cityButtonText: {
     color: 'white',
     fontWeight: '700',
+  },
+  cityButtonTextActive: {
+    color: 'black',
+    fontWeight: '800',
   },
 });

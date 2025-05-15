@@ -19,7 +19,11 @@ const SearchField = () => {
 
   const setSearchText = (city: string) => {
     setCityField(city);
-    setCitySearchStatus(true);
+    if (city.length > 0) {
+      setCitySearchStatus(true);
+    } else {
+      setCitySearchStatus(false);
+    }
   };
 
   return (
@@ -47,12 +51,13 @@ const GeolocationButton = () => {
 
   const handlePress = () => {
     setCitySearchStatus(false);
+    setLocation({});
     setCityField('');
     Geolocation.getCurrentPosition(
       pos => {
         setLocation(pos);
         setLocationPerm(true);
-        console.log(pos);
+        // console.log(pos);
       },
       error => {
         console.log(error);
@@ -87,7 +92,7 @@ export const SearchBar = () => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: theme.colors.primary + 'AA',
+    backgroundColor: theme.colors.primary,
     height: 50,
     flexDirection: 'row',
   },

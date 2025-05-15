@@ -56,10 +56,11 @@ export const useCitiesList = (city: string) => {
    * Geocode API: https://open-meteo.com/en/docs/geocoding-api#attribution
    */
   const endpoint = 'https://geocoding-api.open-meteo.com/v1/search';
+  const count = 5;
   // Consider adding count, language, etc., as parameters to the hook if they need to be dynamic
   const apiUrl = `${endpoint}?name=${encodeURIComponent(
     city,
-  )}&count=10&language=en`; // Example with count and language
+  )}&count=${count}&language=en`; // Example with count and language
 
   useEffect(() => {
     if (!city) {

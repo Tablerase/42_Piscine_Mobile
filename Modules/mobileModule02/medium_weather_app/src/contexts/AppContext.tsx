@@ -6,8 +6,10 @@ export enum Page {
   Weekly = 'Weekly',
 }
 
-interface Position {
+export interface Position {
   name?: string;
+  region?: string;
+  country?: string;
   coords?: {
     latitude: number;
     longitude: number;
