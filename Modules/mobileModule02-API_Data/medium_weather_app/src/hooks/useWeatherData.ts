@@ -142,8 +142,16 @@ export const useWeatherData = (
         setData(json as WeatherData);
       } catch (err: any) {
         console.log(err);
-        if (err.message === 'Aborted') {
-          setError('Weather Request time out !');
+        if (err.name === 'AbortError' || err.message === 'Aborted') {
+          setError(
+            'Weather forecast request timed out! Please check your internet connection or try again later.',
+          );
+        } else if (
+          typeof err.message === 'string' &&
+          (err.message.toLowerCase().includes('network request failed') || // Common in React Native
+            err.message.toLowerCase().includes('failed to fetch')) // Common in browsers/some environments
+        ) {
+          setError('No internet connection or server unreachable.');
         } else {
           setError(err.message || 'Unknown error');
         }

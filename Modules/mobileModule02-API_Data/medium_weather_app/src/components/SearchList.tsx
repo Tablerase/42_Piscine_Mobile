@@ -55,7 +55,21 @@ export const SearchList = () => {
     return <ActivityIndicator color={theme.colors.primary} />;
   }
   if (error) {
-    return <Text>Error: {error}</Text>;
+    return (
+      <View style={styles.containerError}>
+        <Text style={styles.textError}>Error: {error}</Text>
+      </View>
+    );
+  }
+
+  if (cities.length === 0) {
+    return (
+      <View style={styles.containerError}>
+        <Text style={styles.textError}>
+          Could not find any result for the supplied address or coordinates.
+        </Text>
+      </View>
+    );
   }
 
   return (
@@ -83,6 +97,15 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     marginTop: 5,
     gap: 5,
+  },
+  containerError: {
+    justifyContent: 'center',
+    height: '85%',
+  },
+  textError: {
+    textAlign: 'center',
+    color: theme.colors.error,
+    fontSize: theme.fontSizes.large,
   },
   cityButton: {
     backgroundColor: theme.colors.primary,

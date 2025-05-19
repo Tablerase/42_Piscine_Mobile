@@ -100,8 +100,16 @@ export const useCitiesList = (city: string) => {
           setCities([]);
         }
       } catch (err: any) {
-        if (err.message === 'Aborted') {
-          setError('Fetch City request timeout');
+        if (err.name === 'AbortError' || err.message === 'Aborted') {
+          setError(
+            'City search request timed out ! Please check your internet connection or try again later.',
+          );
+        } else if (
+          typeof err.message === 'string' &&
+          (err.message.toLowerCase().includes('network request failed') || // Common in React Native
+            err.message.toLowerCase().includes('failed to fetch')) // Common in browsers/some environments
+        ) {
+          setError('No internet connection or server unreachable.');
         } else {
           setError(err.message || 'An unknown error occurred');
         }

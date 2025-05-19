@@ -228,20 +228,22 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   forecastHeader: {
-    flex: 1,
+    flex: 2,
     width: '100%',
     justifyContent: 'center',
   },
   forecastBody: {
-    flex: 15,
+    flex: 13,
     width: '100%',
   },
   forecastHeaderObj: {
     flexDirection: 'row',
     justifyContent: 'center',
+    flexWrap: 'wrap',
     marginBottom: 5,
   },
   forecastHeaderText: {
+    flexShrink: 1,
     textShadowColor: 'grey',
     textShadowOffset: {width: 4, height: 4},
     borderRadius: theme.borderRadius.medium,
