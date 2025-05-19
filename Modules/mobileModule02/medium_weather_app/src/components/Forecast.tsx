@@ -55,12 +55,12 @@ const WeatherItem = (weatherData: {
         {getWeatherDescription(weatherData.weather_code)}
       </Text>
       <Text style={styles.forecastItem}>
-        {weatherData.temperature}
-        {weatherData.temperature_unit}
+        {weatherData.temperature ?? '--'}
+        {weatherData.temperature_unit ?? ''}
       </Text>
       <Text style={styles.forecastItem}>
-        {weatherData.wind_speed}
-        {weatherData.wind_speed_unit}
+        {weatherData.wind_speed ?? '--'}
+        {weatherData.wind_speed_unit ?? ''}
       </Text>
     </View>
   );
@@ -73,21 +73,25 @@ const WeatherInfo = () => {
   let content;
 
   if (loading) {
-    content = <ActivityIndicator color={theme.colors.primary} />;
-  }
-  if (error) {
+    content = (
+      <>
+        <View style={styles.forecast}>
+          <ActivityIndicator size={'large'} color={theme.colors.primary} />
+        </View>
+      </>
+    );
+  } else if (error) {
     content = <Text style={styles.noPermissionText}>{error}</Text>;
-  }
-  if (weather) {
+  } else if (weather) {
     if (page === Page.Currently) {
       content = (
         <>
           <WeatherItem
             weather_code={weather.current?.weather_code}
             temperature={weather.current?.temperature_2m}
-            temperature_unit={weather.current_units?.temperature_2m ?? ''}
+            temperature_unit={weather.current_units?.temperature_2m}
             wind_speed={weather.current?.wind_speed_10m}
-            wind_speed_unit={weather.current_units?.wind_speed_10m ?? ''}
+            wind_speed_unit={weather.current_units?.wind_speed_10m}
           />
         </>
       );
@@ -131,6 +135,9 @@ const WeatherInfo = () => {
           ))}
         </ScrollView>
       );
+    } else {
+      console.log('Unknow weather error');
+      content = <Text>Unknown weather error</Text>;
     }
   }
 
@@ -141,9 +148,16 @@ const WeatherInfo = () => {
     location.coords?.longitude &&
     location.coords?.latitude
   ) {
-    place = [location.coords?.latitude, location.coords?.longitude];
+    place = [
+      String(location.coords?.latitude ?? 'Unknown'),
+      String(location.coords?.longitude ?? 'Unknown'),
+    ];
   } else {
-    place = [location.name, location.region, location.country];
+    place = [
+      String(location.name || 'Unknown'),
+      String(location.region || 'Unknown'),
+      String(location.country || 'Unknown'),
+    ];
   }
   const colors = ['#FFD700', '#87CEEB', '#FF69B4'];
   header = (
@@ -218,6 +232,10 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'center',
   },
+  forecastBody: {
+    flex: 15,
+    width: '100%',
+  },
   forecastHeaderObj: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -231,10 +249,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     padding: 5,
     marginHorizontal: 2,
-  },
-  forecastBody: {
-    flex: 15,
-    width: '100%',
   },
   forecastText: {
     fontSize: theme.fontSizes.xlarge,
@@ -260,6 +274,7 @@ const styles = StyleSheet.create({
   },
   hourlyTime: {
     width: 35,
+    padding: 5,
   },
   dailyRow: {
     flexDirection: 'row',
@@ -269,6 +284,7 @@ const styles = StyleSheet.create({
   },
   dailyTime: {
     minWidth: 80,
+    padding: 5,
   },
   flexShrink: {
     flexShrink: 1,

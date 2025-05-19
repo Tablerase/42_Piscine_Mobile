@@ -72,8 +72,14 @@ export const useCitiesList = (city: string) => {
     const fetchData = async () => {
       setLoading(true);
       setError(null); // Clear previous errors
+
+      const controller = new AbortController();
+      const timeoutDuration = 5000;
+      const timeoutId = setTimeout(() => {
+        controller.abort();
+      }, timeoutDuration);
       try {
-        const response = await fetch(apiUrl);
+        const response = await fetch(apiUrl, {signal: controller.signal});
         if (!response.ok) {
           throw new Error(`API fetch: HTTP status - ${response.status}`);
         }
@@ -94,9 +100,14 @@ export const useCitiesList = (city: string) => {
           setCities([]);
         }
       } catch (err: any) {
-        setError(err.message || 'An unknown error occurred');
+        if (err.message === 'Aborted') {
+          setError('Fetch City request timeout');
+        } else {
+          setError(err.message || 'An unknown error occurred');
+        }
         setCities([]);
       } finally {
+        clearTimeout(timeoutId);
         setLoading(false);
       }
     };

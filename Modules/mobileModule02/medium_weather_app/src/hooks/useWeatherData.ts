@@ -120,8 +120,15 @@ export const useWeatherData = (
 
     const fetchData = async () => {
       setLoading(true);
+
+      const controller = new AbortController();
+      const timeoutDuration = 5000;
+
+      const timeoutId = setTimeout(() => {
+        controller.abort();
+      }, timeoutDuration);
       try {
-        const response = await fetch(apiUrl);
+        const response = await fetch(apiUrl, {signal: controller.signal});
         if (!response.ok) {
           console.log(response);
           throw new Error(`API response: HTTP Status ${response.status}`);
@@ -134,9 +141,15 @@ export const useWeatherData = (
         }
         setData(json as WeatherData);
       } catch (err: any) {
-        setError(err.message || 'Unknown error');
+        console.log(err);
+        if (err.message === 'Aborted') {
+          setError('Weather Request time out !');
+        } else {
+          setError(err.message || 'Unknown error');
+        }
         setData(null);
       } finally {
+        clearTimeout(timeoutId);
         setLoading(false);
       }
     };
