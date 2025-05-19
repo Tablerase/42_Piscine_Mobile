@@ -1,46 +1,75 @@
-import {useAppContext} from '@contexts/AppContext';
+import {Page, useAppContext} from '@contexts/AppContext';
 import {useWeatherData} from '@hooks/useWeatherData';
 import {theme} from '@styles/theme';
 import {ActivityIndicator, Linking, StyleSheet, Text, View} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const weatherCodeDescriptions: {[key: number]: string} = {
-  0: 'Clear sky',
-  1: 'Mainly clear',
-  2: 'Partly cloudy',
-  3: 'Overcast',
-  45: 'Fog',
-  48: 'Depositing rime fog',
-  51: 'Light drizzle',
-  53: 'Moderate drizzle',
-  55: 'Dense drizzle',
-  56: 'Light freezing drizzle',
-  57: 'Dense freezing drizzle',
-  61: 'Slight rain',
-  63: 'Moderate rain',
-  65: 'Heavy rain',
-  66: 'Light freezing rain',
-  67: 'Heavy freezing rain',
-  71: 'Slight snow fall',
-  73: 'Moderate snow fall',
-  75: 'Heavy snow fall',
-  77: 'Snow grains',
-  80: 'Slight rain showers',
-  81: 'Moderate rain showers',
-  82: 'Violent rain showers',
-  85: 'Slight snow showers',
-  86: 'Heavy snow showers',
-  95: 'Thunderstorm',
-  96: 'Thunderstorm with slight hail',
-  99: 'Thunderstorm with heavy hail',
+  0: 'Clear sky ☀️',
+  1: 'Mainly clear 🌤️',
+  2: 'Partly cloudy ⛅',
+  3: 'Overcast ☁️',
+  45: 'Fog 🌫️',
+  48: 'Depositing rime fog 🌫️❄️',
+  51: 'Light drizzle 🌦️',
+  53: 'Moderate drizzle 🌦️',
+  55: 'Dense drizzle 🌧️',
+  56: 'Light freezing drizzle 🌧️❄️',
+  57: 'Dense freezing drizzle 🌧️❄️',
+  61: 'Slight rain 🌦️',
+  63: 'Moderate rain 🌧️',
+  65: 'Heavy rain 🌧️💧',
+  66: 'Light freezing rain 🌧️❄️',
+  67: 'Heavy freezing rain 🌧️❄️',
+  71: 'Slight snow fall 🌨️',
+  73: 'Moderate snow fall 🌨️',
+  75: 'Heavy snow fall ❄️',
+  77: 'Snow grains 🌨️',
+  80: 'Slight rain showers 🌦️',
+  81: 'Moderate rain showers 🌧️',
+  82: 'Violent rain showers ⛈️',
+  85: 'Slight snow showers 🌨️',
+  86: 'Heavy snow showers ❄️',
+  95: 'Thunderstorm ⛈️',
+  96: 'Thunderstorm with slight hail ⛈️🌨️',
+  99: 'Thunderstorm with heavy hail ⛈️❄️',
 };
 
-function getWeatherDescription(code: number): string {
+function getWeatherDescription(code?: number): string {
+  if (code === undefined) {
+    return 'Unknow weather';
+  }
   return weatherCodeDescriptions[code] || 'Unknown weather';
 }
+
+const WeatherItem = (weatherData: {
+  weather_code?: number;
+  temperature?: number;
+  temperature_unit?: string;
+  wind_speed?: number;
+  wind_speed_unit?: string;
+}) => {
+  return (
+    <View style={styles.weatherItemRow}>
+      <Text style={styles.forecastItem}>
+        {getWeatherDescription(weatherData.weather_code)}
+      </Text>
+      <Text style={styles.forecastItem}>
+        {weatherData.temperature}
+        {weatherData.temperature_unit}
+      </Text>
+      <Text style={styles.forecastItem}>
+        {weatherData.wind_speed}
+        {weatherData.wind_speed_unit}
+      </Text>
+    </View>
+  );
+};
 
 const WeatherInfo = () => {
   const {location, page} = useAppContext();
   const {loading, error, data} = useWeatherData(location, page);
+  const weather = data;
   let content;
 
   if (loading) {
@@ -49,8 +78,60 @@ const WeatherInfo = () => {
   if (error) {
     content = <Text style={styles.noPermissionText}>{error}</Text>;
   }
-  if (data) {
-    content = <Text>{JSON.stringify(data)}</Text>;
+  if (weather) {
+    if (page === Page.Currently) {
+      content = (
+        <>
+          <WeatherItem
+            weather_code={weather.current?.weather_code}
+            temperature={weather.current?.temperature_2m}
+            temperature_unit={weather.current_units?.temperature_2m ?? ''}
+            wind_speed={weather.current?.wind_speed_10m}
+            wind_speed_unit={weather.current_units?.wind_speed_10m ?? ''}
+          />
+        </>
+      );
+    } else if (page === Page.Today) {
+      console.log(weather);
+      content = (
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+          {weather.hourly?.time.map((time, index) => (
+            <View key={time || index} style={styles.hourlyRow}>
+              <Text style={styles.hourlyTime}>
+                {new Date(time).getHours()}h{' '}
+              </Text>
+              <WeatherItem
+                key={time || index}
+                weather_code={weather.hourly?.weather_code[index]}
+                temperature={weather.hourly?.temperature_2m[index]}
+                wind_speed={weather.hourly?.wind_speed_10m[index]}
+                temperature_unit={weather.hourly_units?.temperature_2m}
+                wind_speed_unit={weather.hourly_units?.wind_speed_10m}
+              />
+            </View>
+          ))}
+        </ScrollView>
+      );
+    } else if (page === Page.Weekly) {
+      console.log(weather);
+      content = (
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+          {weather.daily?.time.map((time, index) => (
+            <View key={time || index} style={styles.dailyRow}>
+              <Text style={styles.dailyTime}>{time}</Text>
+              <Text style={[styles.forecastItem, styles.flexShrink]}>
+                {getWeatherDescription(weather.daily?.weather_code[index])}
+              </Text>
+              <Text style={[styles.forecastItem, styles.flexShrink]}>
+                {weather.daily?.temperature_2m_min[index]}/
+                {weather.daily?.temperature_2m_max[index]}{' '}
+                {weather.daily_units?.temperature_2m_max}
+              </Text>
+            </View>
+          ))}
+        </ScrollView>
+      );
+    }
   }
 
   let header;
@@ -112,15 +193,6 @@ const GeolocationErrorItem = () => {
 export const Forecast = () => {
   const {location, locationPerm} = useAppContext();
 
-  // let place: string = location.name ?? '';
-  // if (
-  //   !location.name &&
-  //   location.coords?.longitude &&
-  //   location.coords?.latitude
-  // ) {
-  //   place = location.coords?.latitude + ' ' + location.coords?.longitude;
-  // }
-
   if (locationPerm === false && !location.name) {
     return <GeolocationErrorItem />;
   }
@@ -142,15 +214,14 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   forecastHeader: {
-    flexGrow: 1,
+    flex: 1,
     width: '100%',
-    backgroundColor: 'pink',
     justifyContent: 'center',
   },
   forecastHeaderObj: {
-    gap: 5,
     flexDirection: 'row',
     justifyContent: 'center',
+    marginBottom: 5,
   },
   forecastHeaderText: {
     textShadowColor: 'grey',
@@ -159,14 +230,51 @@ const styles = StyleSheet.create({
     fontSize: theme.fontSizes.xlarge,
     textAlign: 'center',
     padding: 5,
+    marginHorizontal: 2,
   },
   forecastBody: {
-    flexGrow: 15,
-    backgroundColor: 'green',
+    flex: 15,
+    width: '100%',
   },
   forecastText: {
     fontSize: theme.fontSizes.xlarge,
     fontWeight: 'bold',
+  },
+  forecastItem: {
+    fontSize: theme.fontSizes.large,
+    borderRadius: theme.borderRadius.medium,
+    padding: 4,
+    margin: 2,
+    backgroundColor: 'lavender',
+  },
+  weatherItemRow: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
+  hourlyRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
+  hourlyTime: {
+    width: 35,
+  },
+  dailyRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
+  dailyTime: {
+    minWidth: 80,
+  },
+  flexShrink: {
+    flexShrink: 1,
+  },
+  scrollContainer: {
+    paddingBottom: 16,
   },
   noPermissionText: {
     fontSize: theme.fontSizes.xlarge,

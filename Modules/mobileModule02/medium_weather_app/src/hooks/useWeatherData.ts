@@ -22,13 +22,57 @@ export interface WeatherData {
   hourly?: {
     time: string[];
     temperature_2m: number[];
+    weather_code: number[];
+    wind_speed_10m: number[];
   };
   hourly_units?: {
+    time: string;
     temperature_2m: string;
+    weather_code: string;
+    wind_speed_10m: string;
+  };
+  daily_units?: {
+    time: string;
+    weather_code: string;
+    temperature_2m_max: string;
+    temperature_2m_min: string;
+  };
+  daily?: {
+    time: string[];
+    weather_code: number[];
+    temperature_2m_max: number[];
+    temperature_2m_min: number[];
+  };
+  current_units?: {
+    time: string;
+    interval: string;
+    temperature_2m: string;
+    weather_code: string;
+    wind_speed_10m: string;
+  };
+  current?: {
+    time: string;
+    temperature_2m?: number;
+    weather_code?: number;
+    wind_speed_10m?: number;
   };
 }
 
-export const useWeatherData = (toSearch: Position, periode?: Page) => {
+const currentParams = ['temperature_2m', 'weather_code', 'wind_speed_10m'];
+const todayParams = {
+  hourly: ['temperature_2m', 'weather_code', 'wind_speed_10m'],
+  forecast_days: 1,
+};
+const weeklyParams = [
+  'weather_code',
+  'temperature_2m_max',
+  'temperature_2m_min',
+];
+
+export const useWeatherData = (
+  toSearch: Position,
+  periode: Page = Page.Currently,
+) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<WeatherData | null>(null);
@@ -36,6 +80,8 @@ export const useWeatherData = (toSearch: Position, periode?: Page) => {
   /**
    * Weather API: https://open-meteo.com/en/docs#api_documentation
    * Current: https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&current=temperature_2m,weather_code,wind_speed_10m
+   * Today: https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&hourly=temperature_2m,weather_code,wind_speed_10m&forecast_days=1
+   * Weekly: https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&daily=weather_code,temperature_2m_max,temperature_2m_min
    */
   const endpoint = 'https://api.open-meteo.com/v1/forecast';
   useEffect(() => {
@@ -50,17 +96,34 @@ export const useWeatherData = (toSearch: Position, periode?: Page) => {
       return;
     }
 
-    const params = new URLSearchParams({
-      latitude: String(toSearch.coords.latitude),
-      longitude: String(toSearch.coords.longitude),
+    const coords = new URLSearchParams({
+      latitude: toSearch.coords.latitude.toString(),
+      longitude: toSearch.coords.longitude.toString(),
     });
-    const apiUrl = `${endpoint}?${params.toString()}`;
+    let params = new URLSearchParams();
+    if (periode === Page.Currently) {
+      params = new URLSearchParams({
+        current: currentParams.join(','),
+      });
+    } else if (periode === Page.Today) {
+      params = new URLSearchParams({
+        hourly: todayParams.hourly.join(','),
+        forecast_days: todayParams.forecast_days.toString(),
+      });
+    } else if (periode === Page.Weekly) {
+      params = new URLSearchParams({
+        daily: weeklyParams.join(','),
+      });
+    }
+
+    const apiUrl = `${endpoint}?${coords.toString()}&${params.toString()}`;
 
     const fetchData = async () => {
       setLoading(true);
       try {
         const response = await fetch(apiUrl);
         if (!response.ok) {
+          console.log(response);
           throw new Error(`API response: HTTP Status ${response.status}`);
         }
 
@@ -78,7 +141,7 @@ export const useWeatherData = (toSearch: Position, periode?: Page) => {
       }
     };
     fetchData();
-  }, [toSearch]);
+  }, [toSearch, periode]);
 
   return {loading, error, data};
 };

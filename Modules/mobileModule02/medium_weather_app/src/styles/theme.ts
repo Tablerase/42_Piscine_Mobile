@@ -1,3 +1,7 @@
+/**
+ * Default colors: https://www.w3schools.com/cssref/css_colors.php
+ */
+
 export const theme = {
   colors: {
     primary: '#bbaadd',
