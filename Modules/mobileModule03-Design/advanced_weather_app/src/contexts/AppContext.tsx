@@ -22,12 +22,19 @@ export interface Position {
   timestamp?: number;
 }
 
+export interface ScreenDim {
+  width: number;
+  height: number;
+}
+
 interface AppState {
   page: Page;
   location: Position;
   locationPerm: boolean;
   cityField: string;
   citySearchStatus: boolean;
+  direction: 'row' | 'column';
+  dimension: ScreenDim;
 }
 
 interface AppContextType extends AppState {
@@ -36,6 +43,8 @@ interface AppContextType extends AppState {
   setLocationPerm: (granted: boolean) => void;
   setCitySearchStatus: (granted: boolean) => void;
   setCityField: (city: string) => void;
+  setDirection: (dir: 'row' | 'column') => void;
+  setDimension: (dim: ScreenDim) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -46,6 +55,8 @@ export const AppProvider = ({children}: {children: React.ReactNode}) => {
   const [locationPerm, setLocationPerm] = useState<boolean>(true);
   const [citySearchStatus, setCitySearchStatus] = useState<boolean>(false);
   const [cityField, setCityField] = useState<string>('');
+  const [direction, setDirection] = useState<'row' | 'column'>('row');
+  const [dimension, setDimension] = useState<ScreenDim>({width: 0, height: 0});
 
   return (
     <AppContext
@@ -60,6 +71,10 @@ export const AppProvider = ({children}: {children: React.ReactNode}) => {
         setCityField,
         citySearchStatus,
         setCitySearchStatus,
+        direction,
+        setDirection,
+        dimension,
+        setDimension,
       }}>
       {children}
     </AppContext>

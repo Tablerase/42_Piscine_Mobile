@@ -9,7 +9,7 @@ import {StyleSheet, Text, View} from 'react-native';
 import {getTemperatureColor} from '@utils/temperatureColor';
 
 export const CurrentForecast = (weather: WeatherData) => {
-  const {page} = useAppContext();
+  const {page, direction} = useAppContext();
 
   if (page !== Page.Currently) {
     throw new Error(
@@ -26,7 +26,13 @@ export const CurrentForecast = (weather: WeatherData) => {
 
   return (
     <>
-      <View style={styles.currentContainer}>
+      <View
+        style={[
+          styles.currentContainer,
+          direction === 'row'
+            ? {flexDirection: direction, alignItems: 'center'}
+            : {},
+        ]}>
         <Text style={styles.forecastDescriptionText}>
           {weatherDescriptions.desc}
         </Text>
@@ -64,6 +70,7 @@ const styles = StyleSheet.create({
   forecastTemperatureText: {
     fontSize: 30,
     textAlign: 'center',
+    fontWeight: 'bold',
   },
   forecastWindText: {
     fontSize: 30,

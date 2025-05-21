@@ -333,7 +333,8 @@ npm install react-native-vector-icons
 
 ### Charts
 
-[ReactNative - Gifted Charts](https://www.npmjs.com/package/react-native-gifted-charts)
+- [ReactNative - Gifted Charts](https://www.npmjs.com/package/react-native-gifted-charts)
+  - Line Chart props: https://github.com/Abhinandan-Kushwaha/react-native-gifted-charts/blob/master/docs/LineChart/LineChartProps.md
 
 ### Gestures
 
