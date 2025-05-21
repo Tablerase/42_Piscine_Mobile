@@ -5,30 +5,7 @@ import {ActivityIndicator, Linking, StyleSheet, Text, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {CurrentForecast} from './CurrentForecast';
 import {getWeatherDescription} from '@utils/weatherDescription';
-
-const WeatherItem = (weatherData: {
-  weather_code?: number;
-  temperature?: number;
-  temperature_unit?: string;
-  wind_speed?: number;
-  wind_speed_unit?: string;
-}) => {
-  return (
-    <View style={styles.weatherItemRow}>
-      <Text style={styles.forecastItem}>
-        {String(getWeatherDescription(weatherData.weather_code, true))}
-      </Text>
-      <Text style={styles.forecastItem}>
-        {weatherData.temperature ?? '--'}
-        {weatherData.temperature_unit ?? ''}
-      </Text>
-      <Text style={styles.forecastItem}>
-        {weatherData.wind_speed ?? '--'}
-        {weatherData.wind_speed_unit ?? ''}
-      </Text>
-    </View>
-  );
-};
+import {TodayForecast} from './TodayForecast';
 
 const WeatherInfo = () => {
   const {location, page} = useAppContext();
@@ -69,37 +46,12 @@ const WeatherInfo = () => {
     if (page === Page.Currently) {
       content = (
         <>
-          {/* <WeatherItem
-            weather_code={weather.current?.weather_code}
-            temperature={weather.current?.temperature_2m}
-            temperature_unit={weather.current_units?.temperature_2m}
-            wind_speed={weather.current?.wind_speed_10m}
-            wind_speed_unit={weather.current_units?.wind_speed_10m}
-          /> */}
           <CurrentForecast {...weather} />
         </>
       );
     } else if (page === Page.Today) {
       console.log(weather);
-      content = (
-        <ScrollView contentContainerStyle={styles.scrollContainer}>
-          {weather.hourly?.time.map((time, index) => (
-            <View key={time || index} style={styles.hourlyRow}>
-              <Text style={styles.hourlyTime}>
-                {new Date(time).getHours()}h{' '}
-              </Text>
-              <WeatherItem
-                key={time || index}
-                weather_code={weather.hourly?.weather_code[index]}
-                temperature={weather.hourly?.temperature_2m[index]}
-                wind_speed={weather.hourly?.wind_speed_10m[index]}
-                temperature_unit={weather.hourly_units?.temperature_2m}
-                wind_speed_unit={weather.hourly_units?.wind_speed_10m}
-              />
-            </View>
-          ))}
-        </ScrollView>
-      );
+      content = <TodayForecast {...weather} />;
     } else if (page === Page.Weekly) {
       console.log(weather);
       content = (

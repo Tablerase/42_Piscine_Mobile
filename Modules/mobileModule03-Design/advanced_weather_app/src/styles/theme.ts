@@ -15,6 +15,13 @@ export const theme = {
       secondary: '#ffffff',
       disabled: '#a1a1a1',
     },
+    temperature: {
+      cold: '#0000FF', // Blue
+      cool: '#ADD8E6', // Light Blue
+      moderate: '#008000', // Green
+      warm: '#FFA500', // Orange
+      hot: '#FF0000', // Red
+    },
   },
   fonts: {
     regular: 'System',

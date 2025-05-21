@@ -1,12 +1,12 @@
 import {Page, useAppContext} from '@contexts/AppContext';
 import {WeatherData} from '@hooks/useWeatherData';
-import {theme} from '@styles/theme';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
   getWeatherDescription,
   weatherCodeItem,
 } from '@utils/weatherDescription';
 import {StyleSheet, Text, View} from 'react-native';
+import {getTemperatureColor} from '@utils/temperatureColor';
 
 export const CurrentForecast = (weather: WeatherData) => {
   const {page} = useAppContext();
@@ -22,6 +22,8 @@ export const CurrentForecast = (weather: WeatherData) => {
     false,
   ) as weatherCodeItem;
 
+  const temperatureColor = getTemperatureColor(weather.current?.temperature_2m);
+
   return (
     <>
       <View style={styles.currentContainer}>
@@ -31,7 +33,8 @@ export const CurrentForecast = (weather: WeatherData) => {
         <Text style={styles.forecastDescriptionEmojis}>
           {weatherDescriptions.emojis}
         </Text>
-        <Text style={[styles.forecastTemperatureText, {color: 'red'}]}>
+        <Text
+          style={[styles.forecastTemperatureText, {color: temperatureColor}]}>
           {weather.current?.temperature_2m ?? '--'}
           {weather.current_units?.temperature_2m ?? ''}
         </Text>
@@ -54,7 +57,7 @@ export const CurrentForecast = (weather: WeatherData) => {
 const styles = StyleSheet.create({
   currentContainer: {
     flex: 1,
-    // justifyContent: 'center',
+    justifyContent: 'center',
     gap: 20,
     height: '100%',
   },

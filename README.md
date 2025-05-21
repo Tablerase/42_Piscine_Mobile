@@ -331,6 +331,10 @@ npm install react-native-vector-icons
 - [List of Icons](https://oblador.github.io/react-native-vector-icons/)
 - [Material Design Icons](https://pictogrammers.com/library/mdi/)
 
+### Charts
+
+[ReactNative - Gifted Charts](https://www.npmjs.com/package/react-native-gifted-charts)
+
 ### Gestures
 
 [ReactNative - Gesture Handler](https://docs.swmansion.com/react-native-gesture-handler/docs/)
