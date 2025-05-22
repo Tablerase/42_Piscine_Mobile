@@ -85,6 +85,19 @@ const WeatherInfo = () => {
     theme.colors.primary + 'aa',
     theme.colors.primary + 'aa',
   ];
+  const placeSize = place.join('').length;
+  const placeTextSize = (size: number) => {
+    if (size <= 20) {
+      return 30;
+    } else if (size <= 30) {
+      return 25;
+    } else if (size <= 50) {
+      return 20;
+    } else {
+      return 16;
+    }
+  };
+
   header = (
     <View style={styles.forecastHeaderObj}>
       {place.map((placeObj, idx) => (
@@ -93,6 +106,7 @@ const WeatherInfo = () => {
           style={[
             styles.forecastHeaderText,
             {backgroundColor: colors[idx % colors.length]},
+            {fontSize: placeTextSize(placeSize)},
           ]}>
           {placeObj}
         </Text>

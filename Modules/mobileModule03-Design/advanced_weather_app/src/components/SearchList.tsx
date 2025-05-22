@@ -109,7 +109,7 @@ export const SearchList = () => {
 const styles = StyleSheet.create({
   container: {
     alignContent: 'center',
-    marginTop: 5,
+    margin: 5,
     gap: 5,
   },
   containerError: {
@@ -127,6 +127,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     flexDirection: 'row',
     alignItems: 'center',
+    flexWrap: 'wrap',
   },
   CityButtonIcon: {
     padding: 5,

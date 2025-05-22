@@ -95,7 +95,7 @@ export const SearchList = () => {
 const styles = StyleSheet.create({
   container: {
     alignContent: 'center',
-    marginTop: 5,
+    margin: 5,
     gap: 5,
   },
   containerError: {
@@ -111,6 +111,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.primary,
     padding: 10,
     borderRadius: 10,
+    flexWrap: 'wrap',
   },
   CityButtonPressed: {
     backgroundColor: theme.colors.secondary,
