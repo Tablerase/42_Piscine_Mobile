@@ -9,30 +9,25 @@ import {
 import {StyleSheet, View, Text} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {LineChart} from 'react-native-gifted-charts';
-import {Stop, LinearGradient} from 'react-native-svg';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-interface HourlyCardProps {
+interface DailyCardProps {
   time: string;
-  temperature: number;
+  temperatureMin: number;
+  temperatureMax: number;
   weatherCode: number;
   temperatureUnit?: string;
-  wind: number;
-  windUnit?: string;
 }
 
-const HourlyWeatherCard = ({
+const DailyWeatherCard = ({
   time,
-  temperature,
+  temperatureMin,
+  temperatureMax,
   weatherCode,
   temperatureUnit,
-  wind,
-  windUnit,
-}: HourlyCardProps) => {
-  const displayTime = new Date(time).toLocaleTimeString([], {
-    hour: 'numeric',
-    minute: '2-digit',
-    hour12: false,
+}: DailyCardProps) => {
+  const displayTime = new Date(time).toLocaleDateString([], {
+    day: '2-digit',
+    month: '2-digit',
   });
 
   // Example: const { iconName, description } = getWeatherInfo(weatherCode);
@@ -43,76 +38,60 @@ const HourlyWeatherCard = ({
   ) as weatherCodeItem;
   const iconPlaceholder = weatherDescription.emojis;
   // const descriptionPlaceholder = weatherDescription.desc;
-  const temperatureColor = getTemperatureColor(temperature);
+  const temperatureColor = getTemperatureColor(temperatureMax);
 
   return (
     <View style={[styles.weatherCard, {borderColor: temperatureColor}]}>
       <Text style={styles.forecastDescriptionText}>{displayTime}</Text>
       <Text style={styles.forecastDescriptionEmojis}>{iconPlaceholder}</Text>
-      <Text style={[styles.forecastTemperatureText, {color: temperatureColor}]}>
-        {temperature.toFixed(0)}
+      <Text style={[styles.forecastTemperatureMaxText]}>
+        {temperatureMax.toFixed(0)}
         {temperatureUnit}
       </Text>
+      <Text style={[styles.forecastTemperatureMinText]}>
+        {temperatureMin.toFixed(0)}
+        {temperatureUnit}
+      </Text>
+
       {/* <Text style={styles.forecastDescriptionText}>{descriptionPlaceholder}</Text> */}
-      <View style={styles.forecastWindContainer}>
-        <Icon
-          name="weather-windy"
-          size={styles.forecastWindText.fontSize}
-          color={styles.forecastWindIcon.color}
-        />
-        <Text style={styles.forecastWindText}>
-          {wind}
-          {windUnit}
-        </Text>
-      </View>
     </View>
   );
 };
 
-// Props for the updated WeatherItem component
-interface WeatherItemProps {
-  hourly: {
-    time: string[];
-    temperature_2m: number[];
-    weather_code: number[];
-    wind_speed_10m: number[];
-  };
-  units?: {
-    temperature_2m?: string;
-    wind_speed_10m?: string;
-  };
-}
+interface WeatherItemProps extends Pick<WeatherData, 'daily' | 'daily_units'> {}
 
-const WeatherItems = ({hourly, units}: WeatherItemProps) => {
-  if (!hourly || !hourly.time || hourly.time.length === 0) {
-    return <Text>Hourly forecast data is not available.</Text>; // Or return null
+const WeatherItems = ({daily, daily_units}: WeatherItemProps) => {
+  if (!daily || !daily.time || daily.time.length === 0) {
+    return <Text>Daily forecast data is not available.</Text>;
   }
 
-  // TODO: Scroll ref to current hour
   return (
     <ScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
-      // style={styles.hourlyScrollView}
+      // style={styles.dailyScrollView}
     >
-      {hourly.time.map((time, index) => {
-        const temp = hourly.temperature_2m?.[index];
-        const code = hourly.weather_code?.[index];
-        const wind = hourly.wind_speed_10m?.[index];
+      {daily.time.map((time, index) => {
+        const temperatureMax = daily.temperature_2m_max?.[index];
+        const code = daily.weather_code?.[index];
+        const temperatureMin = daily.temperature_2m_min?.[index];
 
-        if (temp === undefined || code === undefined || wind === undefined) {
+        if (
+          temperatureMax === undefined ||
+          code === undefined ||
+          temperatureMin === undefined
+        ) {
           return null;
         }
 
         return (
-          <HourlyWeatherCard
+          <DailyWeatherCard
             key={time}
             time={time}
-            temperature={temp}
+            temperatureMax={temperatureMax}
+            temperatureMin={temperatureMin}
             weatherCode={code}
-            temperatureUnit={units?.temperature_2m ?? '°C'}
-            wind={wind}
-            windUnit={units?.wind_speed_10m ?? 'km/h'}
+            temperatureUnit={daily_units?.temperature_2m_max ?? '°C'}
           />
         );
       })}
@@ -125,43 +104,39 @@ interface temperatureChartPoint {
   label?: string;
 }
 
-export const TodayForecast = (weather: WeatherData) => {
+export const WeeklyForecast = (weather: WeatherData) => {
   const {dimension, direction} = useAppContext();
 
-  const chartsData: temperatureChartPoint[] = [];
-  if (weather.hourly === undefined) {
+  if (weather.daily === undefined) {
     return (
       <View>
-        <Text>Error recovering hourly weather data</Text>
+        <Text>Error recovering daily weather data</Text>
       </View>
     );
   }
-  weather.hourly?.time.map((time, index) => {
-    const hour = new Date(time).getHours();
+  const chartsData: temperatureChartPoint[] = [];
+  const chartsDataMin: temperatureChartPoint[] = [];
+  weather.daily?.time.map((time, index) => {
+    const displayTime = new Date(time).toLocaleDateString([], {
+      day: '2-digit',
+      month: '2-digit',
+    });
+
     const point: temperatureChartPoint = {
-      value: Number(weather.hourly?.temperature_2m[index]),
+      value: Number(weather.daily?.temperature_2m_max[index]),
     };
-    // Label each 4h
-    if (index % 4 === 0) {
-      point.label = hour.toString();
-    }
+    const pointMin: temperatureChartPoint = {
+      value: Number(weather.daily?.temperature_2m_min[index]),
+    };
+    point.label = displayTime;
     chartsData.push(point);
+    chartsDataMin.push(pointMin);
   });
 
   const chartContentWidth =
     dimension.width > 0
       ? dimension.width - 50 - styles.temperatureCharts.padding * 2
       : 0;
-
-  const gradientTemperature = () => {
-    return (
-      <LinearGradient id="ggrd" x1="0" y1="0" x2={'0'} y2={'1'}>
-        <Stop offset="0" stopColor={'orange'} />
-        <Stop offset="0.5" stopColor={'cyan'} />
-        <Stop offset="1" stopColor={'blue'} />
-      </LinearGradient>
-    );
-  };
 
   const content = (
     <>
@@ -170,21 +145,23 @@ export const TodayForecast = (weather: WeatherData) => {
         <LineChart
           isAnimated
           data={chartsData}
+          color1={theme.colors.temperature.warm}
+          dataPointsColor1={theme.colors.temperature.hot}
+          data2={chartsDataMin}
+          color2={theme.colors.temperature.cool}
+          dataPointsColor2={theme.colors.temperature.cold}
           adjustToWidth
           width={chartContentWidth}
           initialSpacing={0}
           endSpacing={0}
           xAxisLabelTextStyle={styles.xAxisLabel}
           rulesType="solid"
-          hideDataPoints
-          lineGradient
-          lineGradientId="ggrd"
-          lineGradientComponent={gradientTemperature}
+          // hideDataPoints
         />
-        <Text style={styles.xAxisTitle}>Hours of Day</Text>
+        <Text style={styles.xAxisTitle}>Days of week</Text>
       </View>
       <View style={styles.weatherItems}>
-        <WeatherItems hourly={weather.hourly} />
+        <WeatherItems daily={weather.daily} />
       </View>
     </>
   );
@@ -238,17 +215,17 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     padding: 5,
   },
-  forecastTemperatureText: {
+  forecastTemperatureMaxText: {
     fontSize: 30,
     textAlign: 'center',
     fontWeight: 'bold',
+    color: theme.colors.temperature.hot,
   },
-  forecastWindText: {
-    fontSize: 20,
+  forecastTemperatureMinText: {
+    fontSize: 30,
     textAlign: 'center',
-  },
-  forecastWindIcon: {
-    color: '#87CEEB',
+    fontWeight: 'bold',
+    color: theme.colors.temperature.cool,
   },
   forecastDescriptionText: {
     fontSize: 30,
@@ -257,11 +234,5 @@ const styles = StyleSheet.create({
   forecastDescriptionEmojis: {
     fontSize: 90,
     textAlign: 'center',
-  },
-  forecastWindContainer: {
-    justifyContent: 'center',
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
   },
 });

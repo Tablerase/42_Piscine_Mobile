@@ -2,10 +2,9 @@ import {Page, useAppContext} from '@contexts/AppContext';
 import {useWeatherData} from '@hooks/useWeatherData';
 import {theme} from '@styles/theme';
 import {ActivityIndicator, Linking, StyleSheet, Text, View} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
 import {CurrentForecast} from './CurrentForecast';
-import {getWeatherDescription} from '@utils/weatherDescription';
 import {TodayForecast} from './TodayForecast';
+import {WeeklyForecast} from './WeeklyForecast';
 
 const WeatherInfo = () => {
   const {location, page} = useAppContext();
@@ -42,7 +41,6 @@ const WeatherInfo = () => {
   } else if (error) {
     content = <Text style={styles.noPermissionText}>{error}</Text>;
   } else if (weather) {
-    // TODO: Do design for each page separetly
     if (page === Page.Currently) {
       content = (
         <>
@@ -54,25 +52,7 @@ const WeatherInfo = () => {
       content = <TodayForecast {...weather} />;
     } else if (page === Page.Weekly) {
       console.log(weather);
-      content = (
-        <ScrollView contentContainerStyle={styles.scrollContainer}>
-          {weather.daily?.time.map((time, index) => (
-            <View key={time || index} style={styles.dailyRow}>
-              <Text style={styles.dailyTime}>{time}</Text>
-              <Text style={[styles.forecastItem, styles.flexShrink]}>
-                {String(
-                  getWeatherDescription(weather.daily?.weather_code[index]),
-                )}
-              </Text>
-              <Text style={[styles.forecastItem, styles.flexShrink]}>
-                {weather.daily?.temperature_2m_min[index]}/
-                {weather.daily?.temperature_2m_max[index]}{' '}
-                {weather.daily_units?.temperature_2m_max}
-              </Text>
-            </View>
-          ))}
-        </ScrollView>
-      );
+      content = <WeeklyForecast {...weather} />;
     } else {
       console.log('Unknow weather error');
       content = <Text>Unknown weather error</Text>;
