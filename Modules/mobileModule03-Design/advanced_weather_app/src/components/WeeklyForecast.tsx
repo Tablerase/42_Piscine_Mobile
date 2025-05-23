@@ -9,6 +9,7 @@ import {
 import {StyleSheet, View, Text} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {LineChart} from 'react-native-gifted-charts';
+import {TemperatureVectorLegend} from './TemperatureVectorLegend';
 
 interface DailyCardProps {
   time: string;
@@ -158,6 +159,12 @@ export const WeeklyForecast = (weather: WeatherData) => {
           rulesType="solid"
           // hideDataPoints
         />
+        <View style={{flexDirection: 'row', justifyContent: 'center', gap: 10}}>
+          <TemperatureVectorLegend color={theme.colors.temperature.hot} />
+          <Text style={{color: theme.colors.temperature.hot}}>max</Text>
+          <TemperatureVectorLegend color={theme.colors.temperature.cold} />
+          <Text style={{color: theme.colors.temperature.cold}}>min</Text>
+        </View>
         <Text style={styles.xAxisTitle}>Days of week</Text>
       </View>
       <View style={styles.weatherItems}>

@@ -48,13 +48,13 @@ const WeatherInfo = () => {
         </>
       );
     } else if (page === Page.Today) {
-      console.log(weather);
+      // console.log(weather);
       content = <TodayForecast {...weather} />;
     } else if (page === Page.Weekly) {
-      console.log(weather);
+      // console.log(weather);
       content = <WeeklyForecast {...weather} />;
     } else {
-      console.log('Unknow weather error');
+      // console.log('Unknow weather error');
       content = <Text>Unknown weather error</Text>;
     }
   }
@@ -68,7 +68,7 @@ const WeatherInfo = () => {
   const placeSize = place.join('').length;
   const placeTextSize = (size: number) => {
     if (size <= 20) {
-      return 30;
+      return 26;
     } else if (size <= 30) {
       return 25;
     } else if (size <= 50) {
@@ -149,11 +149,12 @@ const styles = StyleSheet.create({
   forecastHeader: {
     flex: 2,
     padding: 5,
+    marginTop: 5,
     width: '100%',
     justifyContent: 'center',
   },
   forecastBody: {
-    flex: 13,
+    flex: 17,
     width: '100%',
   },
   forecastHeaderObj: {

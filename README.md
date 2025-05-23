@@ -331,6 +331,14 @@ npm install react-native-vector-icons
 - [List of Icons](https://oblador.github.io/react-native-vector-icons/)
 - [Material Design Icons](https://pictogrammers.com/library/mdi/)
 
+### Images
+
+#### SVG : Scalable Vector Graphics
+
+- ReactNative - SVG: https://github.com/software-mansion/react-native-svg/blob/main/USAGE.md
+- Transform SVG to React: https://react-svgr.com/playground/
+- SVG cheatsheet: https://pcx3.com/cheatsheets/svg-cheatsheet/ https://cheat-sheets.org/own/svg/index.xhtml
+
 ### Charts
 
 - [ReactNative - Gifted Charts](https://www.npmjs.com/package/react-native-gifted-charts)
