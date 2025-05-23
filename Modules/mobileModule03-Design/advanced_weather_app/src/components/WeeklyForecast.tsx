@@ -46,11 +46,11 @@ const DailyWeatherCard = ({
       <Text style={styles.forecastDescriptionText}>{displayTime}</Text>
       <Text style={styles.forecastDescriptionEmojis}>{iconPlaceholder}</Text>
       <Text style={[styles.forecastTemperatureMaxText]}>
-        {temperatureMax.toFixed(0)}
+        {temperatureMax.toFixed(1)}
         {temperatureUnit}
       </Text>
       <Text style={[styles.forecastTemperatureMinText]}>
-        {temperatureMin.toFixed(0)}
+        {temperatureMin.toFixed(1)}
         {temperatureUnit}
       </Text>
 
@@ -223,16 +223,16 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   forecastTemperatureMaxText: {
-    fontSize: 30,
+    fontSize: 25,
     textAlign: 'center',
     fontWeight: 'bold',
     color: theme.colors.temperature.hot,
   },
   forecastTemperatureMinText: {
-    fontSize: 30,
+    fontSize: 25,
     textAlign: 'center',
     fontWeight: 'bold',
-    color: theme.colors.temperature.cool,
+    color: theme.colors.temperature.cold,
   },
   forecastDescriptionText: {
     fontSize: 30,

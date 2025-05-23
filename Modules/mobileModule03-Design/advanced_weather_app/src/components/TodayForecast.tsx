@@ -50,7 +50,7 @@ const HourlyWeatherCard = ({
       <Text style={styles.forecastDescriptionText}>{displayTime}</Text>
       <Text style={styles.forecastDescriptionEmojis}>{iconPlaceholder}</Text>
       <Text style={[styles.forecastTemperatureText, {color: temperatureColor}]}>
-        {temperature.toFixed(0)}
+        {temperature.toFixed(1)}
         {temperatureUnit}
       </Text>
       {/* <Text style={styles.forecastDescriptionText}>{descriptionPlaceholder}</Text> */}
