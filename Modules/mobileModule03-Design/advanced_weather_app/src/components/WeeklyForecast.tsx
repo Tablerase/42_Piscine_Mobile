@@ -1,7 +1,7 @@
 import {useAppContext} from '@contexts/AppContext';
 import {WeatherData} from '@hooks/useWeatherData';
 import {theme} from '@styles/theme';
-import {getTemperatureColor} from '@utils/temperatureColor';
+// import {getTemperatureColor} from '@utils/temperatureColor';
 import {
   getWeatherDescription,
   weatherCodeItem,
@@ -39,10 +39,10 @@ const DailyWeatherCard = ({
   ) as weatherCodeItem;
   const iconPlaceholder = weatherDescription.emojis;
   // const descriptionPlaceholder = weatherDescription.desc;
-  const temperatureColor = getTemperatureColor(temperatureMax);
+  // const temperatureColor = getTemperatureColor(temperatureMax);
 
   return (
-    <View style={[styles.weatherCard, {borderColor: temperatureColor}]}>
+    <View style={[styles.weatherCard, {borderColor: theme.colors.primary}]}>
       <Text style={styles.forecastDescriptionText}>{displayTime}</Text>
       <Text style={styles.forecastDescriptionEmojis}>{iconPlaceholder}</Text>
       <Text style={[styles.forecastTemperatureMaxText]}>

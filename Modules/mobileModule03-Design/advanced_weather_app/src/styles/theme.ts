@@ -16,11 +16,11 @@ export const theme = {
       disabled: '#a1a1a1',
     },
     temperature: {
-      cold: '#0000FF', // Blue
-      cool: '#ADD8E6', // Light Blue
-      moderate: '#008000', // Green
-      warm: '#FFA500', // Orange
-      hot: '#FF0000', // Red
+      cold: '#83AAF1',
+      cool: '#ADD8E6',
+      moderate: '#84e184',
+      warm: '#FFA500',
+      hot: '#cc1122',
     },
   },
   fonts: {
