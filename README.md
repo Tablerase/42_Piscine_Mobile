@@ -331,6 +331,18 @@ npm install react-native-vector-icons
 - [List of Icons](https://oblador.github.io/react-native-vector-icons/)
 - [Material Design Icons](https://pictogrammers.com/library/mdi/)
 
+#### App Icons
+
+- [App Icons - Android](https://developer.android.com/studio/write/image-asset-studio)
+
+- Icons sets generators for each different sizes:
+
+  - [Icon Kitchen - App Icon sets generator](https://icon.kitchen/)
+  - [App Icon Generator](https://appicon.co/)
+  - Some edit might be needed with AndroidManifest.xml or Info.plist (or other config file) to make sure the icons files are compatible with OS icons configuration.
+
+- [Good practice for Icon Design](https://nexusmktg.com/app-icon-design-best-practices/#:~:text=All%20icon%20variations%20must%20follow%20the%20same%20image,mask%20to%20round%20the%20corners%20of%20your%20icon.)
+
 ### Images
 
 #### SVG : Scalable Vector Graphics
@@ -448,7 +460,7 @@ In iOS, permissions are defined in the `Info.plist` file. This file is located i
 
 [React Native Community - Geolocation](https://github.com/michalchudziak/react-native-geolocation)
 
-### React Native CLI
+### React Native CLI Components
 
 #### Metro Bundler
 
@@ -469,6 +481,16 @@ Babel is a JavaScript compiler that allows you to use the latest JavaScript feat
 
 [Configuring Babel](https://babeljs.io/docs/config-files/)
 [ReactNative - Babel](https://reactnative.dev/docs/babel)
+
+## Building
+
+### Android
+
+```bash
+# Build the Android unsigned / signed APK
+cd android
+./gradlew assembleRelease
+```
 
 ## Testing
 
