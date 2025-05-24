@@ -220,7 +220,7 @@ Start the Expo server:
 npx expo start
 ```
 
-Start with React Native CLI (better adb - no error with debugger):
+Start with React Native CLI (better adb - pc and device connection):
 
 ```bash
 # JS build tool for ReactNative - Metro
@@ -232,6 +232,28 @@ npm start
 # Build and run the app
 npm run android
 ```
+
+### React Native CLI Components
+
+#### Metro Bundler
+
+Metro is a JavaScript bundler for React Native applications. It is responsible for transforming and serving your JavaScript code, allowing you to run your app on Android and iOS devices.
+Metro is designed to work with React Native and provides features like hot reloading, which allows you to see changes in your app without needing to rebuild it completely. It also handles the resolution of JavaScript modules and assets, ensuring that your app runs smoothly on different platforms.
+
+#### Watchman
+
+Watchman is a file-watching service developed by Facebook. It is used by Metro to monitor changes in your project files and trigger updates in the development environment. Watchman helps improve the performance of the development process by efficiently tracking file changes and notifying Metro when it needs to rebuild or reload the app.
+
+#### Gradle
+
+Gradle is a build automation tool used by Android Studio to compile and package Android applications. It is responsible for managing dependencies, building the app, and generating the final APK (Android Package) file that can be installed on Android devices.
+
+#### Babel
+
+Babel is a JavaScript compiler that allows you to use the latest JavaScript features in your React Native applications. It transforms modern JavaScript code into a version that is compatible with older devices and browsers, ensuring that your app runs smoothly across different platforms.
+
+[Configuring Babel](https://babeljs.io/docs/config-files/)
+[ReactNative - Babel](https://reactnative.dev/docs/babel)
 
 ### File structure
 
@@ -265,7 +287,7 @@ Medium Project Structure:
 ├── navigation
 │   ├── AppNavigator.tsx
 │   └── NavigationContainer.tsx
-├── pages
+├── pages/screens
 │   ├── HomePage.tsx
 │   ├── DetailsPage.tsx
 │   └── SettingsPage.tsx
@@ -310,6 +332,11 @@ MyApp
 │       ├── hooks
 │       └── ...
 └── App.js
+```
+
+```bash
+## Create file structure
+mkdir -p src/{components,constants,hooks,assets,screens,services,styles,utils,__tests__}
 ```
 
 ### Layout
@@ -460,37 +487,53 @@ In iOS, permissions are defined in the `Info.plist` file. This file is located i
 
 [React Native Community - Geolocation](https://github.com/michalchudziak/react-native-geolocation)
 
-### React Native CLI Components
+### Navigation
 
-#### Metro Bundler
+[React Native - Navigation](https://reactnavigation.org/docs/getting-started/)
 
-Metro is a JavaScript bundler for React Native applications. It is responsible for transforming and serving your JavaScript code, allowing you to run your app on Android and iOS devices.
-Metro is designed to work with React Native and provides features like hot reloading, which allows you to see changes in your app without needing to rebuild it completely. It also handles the resolution of JavaScript modules and assets, ensuring that your app runs smoothly on different platforms.
+### Building
 
-#### Watchman
-
-Watchman is a file-watching service developed by Facebook. It is used by Metro to monitor changes in your project files and trigger updates in the development environment. Watchman helps improve the performance of the development process by efficiently tracking file changes and notifying Metro when it needs to rebuild or reload the app.
-
-#### Gradle
-
-Gradle is a build automation tool used by Android Studio to compile and package Android applications. It is responsible for managing dependencies, building the app, and generating the final APK (Android Package) file that can be installed on Android devices.
-
-#### Babel
-
-Babel is a JavaScript compiler that allows you to use the latest JavaScript features in your React Native applications. It transforms modern JavaScript code into a version that is compatible with older devices and browsers, ensuring that your app runs smoothly across different platforms.
-
-[Configuring Babel](https://babeljs.io/docs/config-files/)
-[ReactNative - Babel](https://reactnative.dev/docs/babel)
-
-## Building
-
-### Android
+#### Android
 
 ```bash
 # Build the Android unsigned / signed APK
 cd android
 ./gradlew assembleRelease
 ```
+
+### Security
+
+<img src="https://reactnative.dev/docs/assets/d_security_deep-linking.svg" alt="React Native Security" width='100' align="right">
+
+Deep linking is a way to link to specific content within a mobile application. It allows users to navigate directly to a particular screen or feature in the app, rather than just opening the app's home screen. But it also introduces security considerations, as deep links can potentially expose sensitive information or allow unauthorized access to certain parts of the app.
+
+[React Native - Security](https://reactnative.dev/docs/security)
+
+### Storage
+
+```mermaid
+flowchart LR
+    Start["Need to store<br/>data?"] --> Q1{"Is it sensitive<br/>information?"}
+
+    Q1 -->|"Yes"| Secure["Use Secure Storage:<br/>#8226; Authentication tokens<br/>#8226; Passwords<br/>#8226; Encryption keys"]
+
+    Q1 -->|"No"| Q2{"What type of<br/>data?"}
+
+    Q2 -->|"Simple key-value<br/>pairs"| AsyncStorage["Use an Async Storage:<br/>#8226; User preferences<br/>#8226; App settings<br/>#8226; Non-sensitive strings"]
+
+    Q2 -->|"Structured data<br/>or large datasets"| DB["Consider Database:<br/>#8226; Complex relationships<br/>#8226; Large amounts of data<br/>#8226; Query requirements"]
+
+    style Start fill:#f9f,stroke:#333,color:#000
+    style Q1 fill:#bbf,stroke:#333,color:#000
+    style Q2 fill:#bbf,stroke:#333,color:#000
+    style Secure fill:#dfd,stroke:#333,color:#000
+    style AsyncStorage fill:#dfd,stroke:#333,color:#000
+    style DB fill:#dfd,stroke:#333,color:#000
+```
+
+To store data in a React Native application, you can use various methods depending on the type of data and persistence requirements.
+
+- [List of Storage of up to date Options](https://reactnative.directory/?search=storage&order=quality)
 
 ## Testing
 
@@ -507,3 +550,11 @@ cd android
 - [Open Meteo](https://open-meteo.com/en/docs):
   - [Non commercial - Open Meteo - Geocoding API](https://open-meteo.com/en/docs/geocoding-api#api_documentation)
   - [Non commercial - Open Meteo - Weather API](https://open-meteo.com/en/docs)
+
+## Authentication
+
+### Firebase Authentication
+
+- [Firebase Authentication](https://firebase.google.com/docs/auth)
+  - [Firebase dashboard](https://console.firebase.google.com/)
+- https://rnfirebase.io/#installation-for-react-native-cli-non-expo-projects
