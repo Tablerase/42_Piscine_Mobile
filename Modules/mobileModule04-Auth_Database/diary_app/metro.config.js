@@ -47,12 +47,14 @@ const config = {
         },
       },
     ),
-    // Add 'ts' and 'tsx' to sourceExts if not already present
     sourceExts: [
       ...(getDefaultConfig(__dirname).resolver.sourceExts || []),
       'ts',
       'tsx',
+      'cjs', // Include CommonJS modules (e.g., Firebase)
+      'mjs', // Include ES modules (e.g., Firebase)
     ],
+    unstable_enablePackageExports: false, // Disable package exports for compatibility
   },
   // Optional: Watch the aliased folders for changes
   watchFolders: [path.resolve(__dirname, 'src')],

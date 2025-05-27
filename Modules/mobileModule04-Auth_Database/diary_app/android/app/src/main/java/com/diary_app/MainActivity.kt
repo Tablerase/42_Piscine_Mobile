@@ -1,4 +1,4 @@
-package com.diary_app
+package com.diary_app.app
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate

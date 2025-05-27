@@ -1,4 +1,4 @@
-package com.diary_app
+package com.diary_app.app
 
 import android.app.Application
 import com.facebook.react.PackageList

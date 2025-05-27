@@ -378,6 +378,14 @@ npm install react-native-vector-icons
 - Transform SVG to React: https://react-svgr.com/playground/
 - SVG cheatsheet: https://pcx3.com/cheatsheets/svg-cheatsheet/ https://cheat-sheets.org/own/svg/index.xhtml
 
+### Fonts
+
+- https://blog.logrocket.com/how-to-add-custom-fonts-react-native/
+
+```bash
+npx react-native-asset
+```
+
 ### Charts
 
 - [ReactNative - Gifted Charts](https://www.npmjs.com/package/react-native-gifted-charts)
@@ -534,6 +542,7 @@ flowchart LR
 To store data in a React Native application, you can use various methods depending on the type of data and persistence requirements.
 
 - [List of Storage of up to date Options](https://reactnative.directory/?search=storage&order=quality)
+- https://github.com/oblador/react-native-keychain
 
 ## Testing
 
@@ -557,4 +566,6 @@ To store data in a React Native application, you can use various methods dependi
 
 - [Firebase Authentication](https://firebase.google.com/docs/auth)
   - [Firebase dashboard](https://console.firebase.google.com/)
-- https://rnfirebase.io/#installation-for-react-native-cli-non-expo-projects
+  - https://console.cloud.google.com/auth/clients
+- Firebase react native: https://rnfirebase.io/#installation-for-react-native-cli-non-expo-projects
+- App auth react native: https://nearform.com/open-source/react-native-app-auth/docs/

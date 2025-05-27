@@ -1,5 +1,11 @@
+import AuthScreen from '@components/AuthScreen';
+
 const App = () => {
-  return <></>;
+  return (
+    <>
+      <AuthScreen />
+    </>
+  );
 };
 
 export default App;

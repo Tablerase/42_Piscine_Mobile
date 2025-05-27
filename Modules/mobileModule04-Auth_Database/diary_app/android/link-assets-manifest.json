@@ -1,0 +1,17 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/Gloria_Hallelujah/GloriaHallelujah-Regular.ttf",
+      "sha1": "f8daece907bf486d3ccf7138f34027e37583c862"
+    },
+    {
+      "path": "assets/fonts/Gloria_Hallelujah/OFL.txt",
+      "sha1": "5a1705c1a0a8c81ea235cf33e3cd2c8e63e8932b"
+    },
+    {
+      "path": "assets/fonts/Patrick_Hand/PatrickHand-Regular.ttf",
+      "sha1": "8e9d9952d4f107775141b5ae00eeb3cac3a19d46"
+    }
+  ]
+}

@@ -1,6 +1,15 @@
 apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
+apply plugin: "com.google.gms.google-services" 
 apply plugin: "com.facebook.react"
+
+// Auth Credentials
+import groovy.json.JsonSlurper
+
+def googleServicesFile = file('google-services.json')
+def googleServices = new JsonSlurper().parse(googleServicesFile)
+def clientId = googleServices.client[0].oauth_client[0].client_id
+
 
 /**
  * This is the configuration block to customize your React Native Android app.
@@ -77,13 +86,17 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.diary_app"
+    namespace "com.diary_app.app"
     defaultConfig {
-        applicationId "com.diary_app"
+        applicationId "com.diary_app.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        manifestPlaceholders = [
+            // Firebase redirect scheme
+            appAuthRedirectScheme: "com.googleusercontent.apps.${clientId.split('\\.')[0]}" // Oauth client ID for Firebase
+        ]
     }
     signingConfigs {
         debug {
@@ -116,4 +129,8 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+
+    // Firebase dependencies
+    implementation platform('com.google.firebase:firebase-bom:33.14.0')
+    implementation 'com.google.firebase:firebase-analytics'
 }

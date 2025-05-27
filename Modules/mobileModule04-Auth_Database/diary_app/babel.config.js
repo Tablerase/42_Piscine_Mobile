@@ -18,7 +18,7 @@ module.exports = {
         alias: {
           '@services': './src/services',
           '@navigation': './src/navigation',
-          '@contexts/*': ['./src/contexts/*'],
+          '@contexts/*': './src/contexts/*',
           '@components': './src/components',
           '@assets': './src/assets',
           '@screens': './src/screens',
