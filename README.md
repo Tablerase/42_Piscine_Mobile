@@ -220,6 +220,16 @@ Start the Expo server:
 npx expo start
 ```
 
+```bash
+# Run the app on Android device with adb
+npx expo start --tunnel
+```
+
+```bash
+# Build the app
+npx expo run:android
+```
+
 Start with React Native CLI (better adb - pc and device connection):
 
 ```bash
@@ -565,7 +575,11 @@ To store data in a React Native application, you can use various methods dependi
 ### Firebase Authentication
 
 - [Firebase Authentication](https://firebase.google.com/docs/auth)
-  - [Firebase dashboard](https://console.firebase.google.com/)
-  - https://console.cloud.google.com/auth/clients
-- Firebase react native: https://rnfirebase.io/#installation-for-react-native-cli-non-expo-projects
-- App auth react native: https://nearform.com/open-source/react-native-app-auth/docs/
+    - Firebase with Expo: https://docs.expo.dev/guides/using-firebase/ 
+    - Firebase react native: https://rnfirebase.io/#installation-for-react-native-cli-non-expo-projects
+    - App auth react native: https://nearform.com/open-source/react-native-app-auth/docs/
+- [Firebase dashboard](https://console.firebase.google.com/)
+- Google auth: https://console.cloud.google.com/auth/clients
+- Github app: https://github.com/settings/applications
+
+    
