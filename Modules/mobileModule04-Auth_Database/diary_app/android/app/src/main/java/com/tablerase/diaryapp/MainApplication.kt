@@ -1,4 +1,5 @@
 package com.tablerase.diaryapp
+import com.facebook.react.common.assets.ReactFontManager
 
 import android.app.Application
 import android.content.res.Configuration
@@ -42,6 +43,11 @@ class MainApplication : Application(), ReactApplication {
 
   override fun onCreate() {
     super.onCreate()
+    // @generated begin xml-fonts-init - expo prebuild (DO NOT MODIFY) sync-32410cd6afefdf845e329d6e6b471b76663745e5
+    ReactFontManager.getInstance().addCustomFont(this, "SpaceMono", R.font.xml_space_mono)
+    ReactFontManager.getInstance().addCustomFont(this, "GloriaHallelujah", R.font.xml_gloria_hallelujah)
+    ReactFontManager.getInstance().addCustomFont(this, "PatrickHand", R.font.xml_patrick_hand)
+    // @generated end xml-fonts-init
     SoLoader.init(this, OpenSourceMergedSoMapping)
     if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
       // If you opted-in for the New Architecture, we load the native entry point for this app.

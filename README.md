@@ -230,6 +230,11 @@ npx expo start --tunnel
 npx expo run:android
 ```
 
+```bash
+# Clean the dev build (android, ios, ...) files
+npx expo prebuild
+```
+
 Start with React Native CLI (better adb - pc and device connection):
 
 ```bash
@@ -389,6 +394,10 @@ npm install react-native-vector-icons
 - SVG cheatsheet: https://pcx3.com/cheatsheets/svg-cheatsheet/ https://cheat-sheets.org/own/svg/index.xhtml
 
 ### Fonts
+
+Expo Font provide build in config handling of fonts.
+
+With react native without expo u can use react-native-asset to do that.
 
 - https://blog.logrocket.com/how-to-add-custom-fonts-react-native/
 

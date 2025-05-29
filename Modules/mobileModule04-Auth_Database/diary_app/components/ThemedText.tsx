@@ -33,11 +33,13 @@ export function ThemedText({
   );
 }
 
+// TODO: Fix fonts not working properly
+
 const styles = StyleSheet.create({
   default: {
     fontSize: 16,
     lineHeight: 24,
-    fontFamily: "GloriaHallelujah-Regular",
+    fontFamily: "PatrickHand",
   },
   defaultSemiBold: {
     fontSize: 16,
@@ -47,12 +49,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     fontWeight: "bold",
-    lineHeight: 32,
-    fontFamily: "PatrickHand-Regular",
+    // lineHeight: 32,
+    fontFamily: "GloriaHallelujah",
   },
   subtitle: {
     fontSize: 20,
     fontWeight: "bold",
+    fontFamily: "SpaceMono",
   },
   link: {
     lineHeight: 30,

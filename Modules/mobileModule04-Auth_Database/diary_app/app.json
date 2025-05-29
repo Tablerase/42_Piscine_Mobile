@@ -9,7 +9,8 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.tablerase.diaryapp"
     },
     "android": {
       "package": "com.tablerase.diaryapp",
@@ -17,6 +18,16 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "autoVerify": true,
+          "data": {
+            "scheme": "diaryapp"
+          },
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
+      ],
       "edgeToEdgeEnabled": true
     },
     "web": {
@@ -42,7 +53,38 @@
             "./assets/fonts/SpaceMono-Regular.ttf",
             "./assets/fonts/Gloria_Hallelujah/GloriaHallelujah-Regular.ttf",
             "./assets/fonts/Patrick_Hand/PatrickHand-Regular.ttf"
-          ]
+          ],
+          "android": {
+            "fonts": [
+              {
+                "fontFamily": "SpaceMono",
+                "fontDefinitions": [
+                  {
+                    "path": "./assets/fonts/SpaceMono-Regular.ttf",
+                    "weight": 800
+                  }
+                ]
+              },
+              {
+                "fontFamily": "GloriaHallelujah",
+                "fontDefinitions": [
+                  {
+                    "path": "./assets/fonts/Gloria_Hallelujah/GloriaHallelujah-Regular.ttf",
+                    "weight": 800
+                  }
+                ]
+              },
+              {
+                "fontFamily": "PatrickHand",
+                "fontDefinitions": [
+                  {
+                    "path": "./assets/fonts/Patrick_Hand/PatrickHand-Regular.ttf",
+                    "weight": 800
+                  }
+                ]
+              }
+            ]
+          }
         }
       ]
     ],
