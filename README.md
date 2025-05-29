@@ -581,14 +581,35 @@ To store data in a React Native application, you can use various methods dependi
 
 ## Authentication
 
+```mermaid
+flowchart LR
+    Start([Start]) --> Check{Check Auth<br/>Status}
+
+    Check -->|Authenticated| Success([User Authenticated])
+    Check -->|Not Authenticated| ShowLogin{Show Login<br/>Form?}
+
+    ShowLogin -->|Yes| Request[Request Login]
+    ShowLogin -->|No| HandleUnauth([Handle Unauthenticated<br/>State])
+
+    Request --> Check
+
+    classDef decision fill:#f9f,stroke:#333,stroke-width:2px,color:#000
+    classDef action fill:#bbf,stroke:#333,stroke-width:2px,color:#000
+    classDef terminal fill:#bfb,stroke:#333,stroke-width:2px,color:#000
+
+    class Check,ShowLogin decision
+    class Request action
+    class Success,HandleUnauth terminal
+```
+
+- https://docs.expo.dev/guides/authentication/
+
 ### Firebase Authentication
 
 - [Firebase Authentication](https://firebase.google.com/docs/auth)
-    - Firebase with Expo: https://docs.expo.dev/guides/using-firebase/ 
-    - Firebase react native: https://rnfirebase.io/#installation-for-react-native-cli-non-expo-projects
-    - App auth react native: https://nearform.com/open-source/react-native-app-auth/docs/
+  - Firebase with Expo: https://docs.expo.dev/guides/using-firebase/
+  - Firebase react native: https://rnfirebase.io/#installation-for-react-native-cli-non-expo-projects
+  - App auth react native: https://nearform.com/open-source/react-native-app-auth/docs/
 - [Firebase dashboard](https://console.firebase.google.com/)
 - Google auth: https://console.cloud.google.com/auth/clients
 - Github app: https://github.com/settings/applications
-
-    
