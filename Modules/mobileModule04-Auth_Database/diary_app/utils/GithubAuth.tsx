@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { Button, View } from "react-native";
 import { Provider, useAuthProvider } from "./AuthProvider";
 
-const githubClientId = process.env.EXPO_PUBLIC_GITHUB_CLIENT_ID;
+const githubClientId = process.env.EXPO_PUBLIC_GITHUB_CLIENT_FIREBASE_ID;
 
 // Endpoint
 const discovery = {

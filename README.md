@@ -593,9 +593,9 @@ flowchart LR
 
     Request --> Check
 
-    classDef decision fill:#f9f,stroke:#333,stroke-width:2px,color:#000
-    classDef action fill:#bbf,stroke:#333,stroke-width:2px,color:#000
-    classDef terminal fill:#bfb,stroke:#333,stroke-width:2px,color:#000
+    classDef decision fill:#f9f,stroke:#333,stroke-width:`px,color:#000
+    classDef action fill:#bbf,stroke:#333,stroke-width:1px,color:#000
+    classDef terminal fill:#bfb,stroke:#333,stroke-width:1px,color:#000
 
     class Check,ShowLogin decision
     class Request action
@@ -603,6 +603,47 @@ flowchart LR
 ```
 
 - https://docs.expo.dev/guides/authentication/
+
+```mermaid
+flowchart LR
+    Start([Start]) --> Check{Auth Provider<br/>User State}
+
+    Check -->|Authenticated| Success([User Authenticated])
+    Check -->|Not Authenticated| ShowLogin([Show Login<br/>Page])
+
+    ShowLogin --> ChooseProvider{Choose Auth<br/>Provider?}
+    ChooseProvider -->|Google| RequestGoogle[Request Google<br/>Auth]
+
+    subgraph ExpoAuthSession["Expo Auth Session - Web Browser"]
+      direction TB
+        GithubOauthCode[Request GitHub<br/>0Auth]
+    end
+    ChooseProvider -->|GitHub| GithubOauthCode
+
+    subgraph FetchToken
+      direction TB
+        GithubToken[Fetch GitHub<br/>Access Token]
+    end
+    GithubOauthCode --> GithubToken
+
+    subgraph FirebaseAuth
+      direction TB
+        FirebaseCredential[Create Firebase<br/>Credential]
+        FirebaseLogin[Login to Firebase]
+        FirebaseCredential --> FirebaseLogin[Login to Firebase]
+    end
+    GithubToken --> FirebaseCredential[Create Firebase<br/>Credential]
+
+    FirebaseLogin --> Check
+
+    classDef decision fill:#f9f,stroke:#333,stroke-width:2px,color:#000
+    classDef action fill:#bbf,stroke:#333,stroke-width:2px,color:#000
+    classDef terminal fill:#bfb,stroke:#333,stroke-width:2px,color:#000
+
+    class Check,ChooseProvider decision
+    class Request,ShowLogin,GithubOauthCode,GithubToken,FirebaseCredential,FirebaseLogin action
+    class Success,HandleUnauth terminal
+```
 
 ### Firebase Authentication
 

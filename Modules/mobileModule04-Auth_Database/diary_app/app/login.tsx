@@ -14,7 +14,7 @@ export default function Login() {
       console.log("Login: User already logged");
       router.replace("/");
     }
-  });
+  }, [isLoggedIn, router]); // Add dependencies to prevent infinite re-renders
 
   return (
     <ThemedView

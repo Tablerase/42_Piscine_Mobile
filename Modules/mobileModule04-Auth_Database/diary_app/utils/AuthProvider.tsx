@@ -1,5 +1,5 @@
 import { useRouter } from "expo-router";
-import { onAuthStateChanged, User } from "firebase/auth";
+import { onAuthStateChanged, signOut, User } from "firebase/auth";
 import { createContext, useContext, useEffect, useState } from "react";
 import { auth } from "./firebaseConfig";
 
@@ -56,27 +56,38 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setUser(user);
       setIsLoading(false);
 
+      console.log("User state changed", user);
       if (user) {
         setIsLoggedIn(true);
+        // Only navigate if we're not already on the home page
+        if (router.canGoBack() || window.location?.pathname !== "/") {
+          router.replace("/");
+        }
       } else {
-        router.replace("/login");
+        setIsLoggedIn(false);
+        // Only navigate to login if we're not already there
+        if (window.location?.pathname !== "/login") {
+          router.replace("/login");
+        }
       }
     });
 
     return () => unsubscribe();
-  });
+  }, [router]); // Add router as dependency
 
   const login = async (token: string) => {
-    // select action according to provider
-    if (provider === Provider.github) {
-      console.log("logging as github user");
-    }
-    console.log("Loggin in");
+    console.log("Login method called - but auth is handled in oauth component");
   };
 
   const logout = async () => {
-    // Placeholder for logout logic
-    console.log("Logging out");
+    try {
+      await signOut(auth);
+      setProvider(null);
+      console.log("User logged out");
+    } catch (error: any) {
+      console.error("Logout error:", error);
+      setError(`Logout error: ${error.message}`);
+    }
   };
 
   const clearError = () => {
