@@ -1,7 +1,9 @@
+import { ThemedButtonIcon } from "@/components/ThemedButtonIcon";
+import { useThemeColor } from "@/hooks/useThemeColor";
+import { Ionicons } from "@expo/vector-icons";
 import { makeRedirectUri, useAuthRequest } from "expo-auth-session";
 import * as WebBrowser from "expo-web-browser";
 import { useEffect } from "react";
-import { Button, View } from "react-native";
 import { Provider, useAuthProvider } from "./AuthProvider";
 
 const githubClientId = process.env.EXPO_PUBLIC_GITHUB_CLIENT_FIREBASE_ID;
@@ -15,6 +17,7 @@ const discovery = {
 
 export const GithubAuth = () => {
   const { setProvider } = useAuthProvider();
+  const iconColor = useThemeColor({}, "background");
 
   WebBrowser.maybeCompleteAuthSession();
   const redirectUri = makeRedirectUri({
@@ -34,7 +37,7 @@ export const GithubAuth = () => {
 
   useEffect(() => {
     if (response?.type === "success") {
-      const { code } = response.params;
+      // const { code } = response.params;
       // console.log(response, code);
     }
   }, [response]);
@@ -47,20 +50,21 @@ export const GithubAuth = () => {
   }, []);
 
   return (
-    <View style={{ gap: 10 }}>
-      <Button
-        disabled={!request}
-        title="Login with GitHub"
-        onPress={() => {
-          setProvider(Provider.github);
-          console.log("promptAsync called");
-          promptAsync({
-            showTitle: true,
-            toolbarColor: "#6200EE",
-            browserPackage: "com.android.chrome", // Force Chrome (this works!)
-          });
-        }}
-      />
-    </View>
+    <ThemedButtonIcon
+      disabled={!request}
+      title="Sign in with GitHub"
+      icon={<Ionicons name="logo-github" size={20} color={iconColor} />}
+      variant="primary"
+      size="large"
+      onPress={() => {
+        setProvider(Provider.github);
+        console.log("Gihtub promptAsync called");
+        promptAsync({
+          showTitle: true,
+          toolbarColor: "#6200EE",
+          browserPackage: "com.android.chrome", // Force Chrome (this works!)
+        });
+      }}
+    />
   );
 };

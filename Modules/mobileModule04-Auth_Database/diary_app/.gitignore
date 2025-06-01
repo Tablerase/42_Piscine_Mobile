@@ -9,6 +9,10 @@ dist/
 web-build/
 expo-env.d.ts
 
+# Google Play
+google-services.json
+google-services.json.*
+
 # Native
 .kotlin/
 *.orig.*

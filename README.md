@@ -518,6 +518,11 @@ In iOS, permissions are defined in the `Info.plist` file. This file is located i
 
 [React Native - Navigation](https://reactnavigation.org/docs/getting-started/)
 
+```bash
+# Manual redirect with uri-scheme
+npx uri-scheme open your_app://your_redirect --android
+```
+
 ### Building
 
 #### Android
@@ -581,6 +586,8 @@ To store data in a React Native application, you can use various methods dependi
 
 ## Authentication
 
+- https://docs.expo.dev/guides/authentication/
+
 ```mermaid
 flowchart LR
     Start([Start]) --> Check{Check Auth<br/>Status}
@@ -602,7 +609,11 @@ flowchart LR
     class Success,HandleUnauth terminal
 ```
 
-- https://docs.expo.dev/guides/authentication/
+Example of Google Authentication Flow:
+
+<img src="https://developers.google.com/static/identity/protocols/oauth2/images/flows/authorization-code.png?authuser=0" alt="Google Authentication Flow" width='500' >
+
+Schema of Authentication Flow with Firebase :
 
 ```mermaid
 flowchart LR
@@ -645,6 +656,16 @@ flowchart LR
     class Success,HandleUnauth terminal
 ```
 
+Signing Report is used to generate a unique key for signing your Android app. This key is essential for publishing your app on the Google Play Store and ensuring its authenticity.
+
+- [Signing Report - React Native](https://reactnative.dev/docs/signed-apk-android#generating-a-signing-report)
+
+```bash
+# Generate a signing report for your Android app
+cd android
+./gradlew signingReport
+```
+
 ### Firebase Authentication
 
 - [Firebase Authentication](https://firebase.google.com/docs/auth)
@@ -653,4 +674,7 @@ flowchart LR
   - App auth react native: https://nearform.com/open-source/react-native-app-auth/docs/
 - [Firebase dashboard](https://console.firebase.google.com/)
 - Google auth: https://console.cloud.google.com/auth/clients
+  - https://developers.google.com/identity/protocols/oauth2/native-app?authuser=0
+  - https://react-native-google-signin.github.io/docs/setting-up/expo#expo-and-firebase-authentication
+  - https://react-native-google-signin.github.io/docs/setting-up/android
 - Github app: https://github.com/settings/applications

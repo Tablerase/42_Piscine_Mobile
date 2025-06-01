@@ -1,3 +1,4 @@
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { useRouter } from "expo-router";
 import { onAuthStateChanged, signOut, User } from "firebase/auth";
 import { createContext, useContext, useEffect, useState } from "react";
@@ -82,7 +83,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const logout = async () => {
     try {
       await signOut(auth);
+      if (provider === Provider.google) {
+        GoogleSignin.signOut();
+      }
       setProvider(null);
+      setIsLoggedIn(false);
       console.log("User logged out");
     } catch (error: any) {
       console.error("Logout error:", error);
