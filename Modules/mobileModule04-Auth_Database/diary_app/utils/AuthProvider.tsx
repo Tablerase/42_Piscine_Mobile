@@ -59,10 +59,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       console.log("User state changed", user);
       if (user) {
+        // ! TODO: Add persistancy to user state
         setIsLoggedIn(true);
         // Only navigate if we're not already on the home page
-        if (router.canGoBack() || window.location?.pathname !== "/") {
-          router.replace("/");
+        if (router.canGoBack() || window.location?.pathname !== "/profile") {
+          router.replace("/profile");
         }
       } else {
         setIsLoggedIn(false);

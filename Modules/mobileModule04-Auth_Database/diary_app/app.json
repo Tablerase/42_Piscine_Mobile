@@ -10,6 +10,7 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
+      "googleServicesFile": "./GoogleService-Info.plist",
       "bundleIdentifier": "com.tablerase.diaryapp"
     },
     "android": {
@@ -88,7 +89,8 @@
           }
         }
       ],
-      ["@react-native-google-signin/google-signin"]
+      ["@react-native-google-signin/google-signin"],
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true

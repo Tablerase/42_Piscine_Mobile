@@ -1,36 +1,50 @@
-import { ThemedButtonIcon } from "@/components/ThemedButtonIcon";
+import { ThemedButton } from "@/components/ThemedButton";
+import { ThemedImageBackground } from "@/components/ThemedImageBackground";
 import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
-import { useThemeColor } from "@/hooks/useThemeColor";
 import { useAuthProvider } from "@/utils/AuthProvider";
-import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
+import { View } from "react-native";
 
 export default function Index() {
-  const { logout, user } = useAuthProvider();
-  const iconColor = useThemeColor({}, "background");
+  const { isLoggedIn } = useAuthProvider();
+  const router = useRouter();
+
+  let content;
+  if (!isLoggedIn) {
+    content = (
+      <ThemedButton title="Login" onPress={() => router.replace("/login")} />
+    );
+  } else {
+    content = (
+      <>
+        <ThemedButton
+          title="Profile"
+          size="large"
+          onPress={() => router.replace("/profile")}
+        />
+
+        {/* Logout button */}
+      </>
+    );
+  }
 
   return (
-    <ThemedView
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        gap: 16,
-        padding: 20,
-      }}
+    <ThemedImageBackground
+      source={require("../assets/images/greenery_no_background.png")}
+      placeholder={"SsMkRro3~Xj[-;j[D%Rj"}
     >
-      <ThemedText type="title">Home page</ThemedText>
-
-      <ThemedText>{JSON.stringify(user).slice(0, 150)}</ThemedText>
-
-      {/* Logout button */}
-      <ThemedButtonIcon
-        title="Logout"
-        size="large"
-        icon={<Ionicons name="log-out" size={20} color={iconColor} />}
-        variant="secondary"
-        onPress={logout}
-      />
-    </ThemedView>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          gap: 16,
+          padding: 20,
+        }}
+      >
+        <ThemedText type="title">Home page</ThemedText>
+        {content}
+      </View>
+    </ThemedImageBackground>
   );
 }

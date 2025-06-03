@@ -11,6 +11,7 @@ const tintColorDark = theme.colors.primary.light;
 export const Colors = {
   light: {
     text: theme.colors.text.primary,
+    textDisabled: theme.colors.text.disabled,
     background: theme.colors.neutral.light,
     tint: tintColorLight,
     secondary: theme.colors.secondary.main,
@@ -31,6 +32,7 @@ export const Colors = {
   },
   dark: {
     text: theme.colors.text.secondary,
+    textDisabled: theme.colors.text.disabled,
     background: theme.colors.neutral.dark,
     tint: tintColorDark,
     secondary: theme.colors.secondary.light,

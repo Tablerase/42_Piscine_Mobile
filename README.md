@@ -221,8 +221,8 @@ npx expo start
 ```
 
 ```bash
-# Run the app on Android device with adb
-npx expo start --tunnel
+# Run the app on Android device with adb in dev build mode
+npx expo start --tunnel --dev-client
 ```
 
 ```bash
@@ -392,6 +392,12 @@ npm install react-native-vector-icons
 - ReactNative - SVG: https://github.com/software-mansion/react-native-svg/blob/main/USAGE.md
 - Transform SVG to React: https://react-svgr.com/playground/
 - SVG cheatsheet: https://pcx3.com/cheatsheets/svg-cheatsheet/ https://cheat-sheets.org/own/svg/index.xhtml
+
+#### Blur hash
+
+BlurHash is a compact representation of a placeholder image that can be used to display a blurred version of an image while the actual image is loading. It is particularly useful for improving the user experience in applications where images are loaded asynchronously.
+
+- https://blurha.sh/
 
 ### Fonts
 

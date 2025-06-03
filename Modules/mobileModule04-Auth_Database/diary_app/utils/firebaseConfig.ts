@@ -1,5 +1,6 @@
-import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { FirebaseApp, getApp, getApps, initializeApp } from "firebase/app";
+import { browserLocalPersistence, initializeAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 // Initialize Firebase
 const firebaseConfig = {
@@ -12,5 +13,30 @@ const firebaseConfig = {
   measurementId: process.env.EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
-export const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
+let app: FirebaseApp;
+
+if (getApps().length === 0) {
+  app = initializeApp(firebaseConfig);
+} else {
+  app = getApp(); // Use the existing app
+}
+
+export { app }; // Export the app instance
+
+// Initialize Auth with persistence
+export const auth = initializeAuth(app, {
+  persistence: browserLocalPersistence,
+});
+
+export const db = getFirestore(app);
+
+// Firestore
+
+export interface DiaryNote {
+  id: string;
+  title: string;
+  text: string;
+  date: any;
+  usermail: string;
+  icon: string;
+}
