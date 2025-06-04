@@ -1,5 +1,6 @@
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
+import { HUMAN_INFO } from "@/constants/humanInfos";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { useAuthProvider } from "@/utils/AuthProvider";
 import { db } from "@/utils/firebaseConfig";
@@ -95,7 +96,7 @@ export const NewNoteForm = ({ onClose, refreshNotes }: NewNoteFormProps) => {
         icon: icon.trim(),
       };
       await addDoc(notesCollectionRef, doc);
-      Alert.alert("Success", "Note saved successfully!");
+      // Alert.alert("Success", "Note saved successfully!");
       setTitle("");
       setText("");
       setIcon("📝");
@@ -166,6 +167,7 @@ export const NewNoteForm = ({ onClose, refreshNotes }: NewNoteFormProps) => {
         onChangeText={setText}
         multiline
         numberOfLines={10}
+        maxLength={HUMAN_INFO.DIARY_INPUTS.PERSONAL}
         textAlignVertical="top"
         placeholderTextColor={placeholderTextColor}
       />

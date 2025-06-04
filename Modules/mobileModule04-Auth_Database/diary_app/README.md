@@ -1,5 +1,7 @@
 # Diary app
 
+## Firebase
+
 Database Firestore rules:
 
 ```js
@@ -40,8 +42,10 @@ service cloud.firestore {
                          request.resource.data.title.size() <= 100 &&
                          request.resource.data.text is string &&
                          request.resource.data.text.size() > 0 &&
+                         request.resource.data.text.size() <= 2500 &&
                          request.resource.data.icon is string &&
                          request.resource.data.icon.size() > 0 &&
+                         request.resource.data.icon.size() <= 10 &&
                          // Ensure usermail is still a string (it was set at creation)
                          request.resource.data.usermail is string &&
                          // Crucially, usermail cannot be changed from its original value
@@ -63,9 +67,11 @@ service cloud.firestore {
                          request.resource.data.title.size() <= 100 &&
                          request.resource.data.text is string &&
                          request.resource.data.text.size() > 0 &&
+                         request.resource.data.text.size() <= 2500 &&
                          request.resource.data.icon is string &&
                          request.resource.data.icon.size() > 0 &&
-                         request.resource.data.date is timestamp &&
+                         request.resource.data.icon.size() <= 10 &&
+                         // request.resource.data.date is timestamp &&
                          request.resource.data.usermail is string &&
                          request.resource.data.usermail.size() > 0
                          // Optional: Consider validating usermail against the authenticated user's email
@@ -77,3 +83,7 @@ service cloud.firestore {
   }
 }
 ```
+
+## Diary info
+
+- https://www.wikihow.com/Write-a-Diary

@@ -3,10 +3,17 @@ import { useThemeColor } from "@/hooks/useThemeColor";
 import { useAuthProvider } from "@/utils/AuthProvider";
 import { db, DiaryNote } from "@/utils/firebaseConfig";
 import { Ionicons } from "@expo/vector-icons";
-import { addDoc, collection } from "firebase/firestore";
+import { deleteDoc, doc } from "firebase/firestore";
 import React, { useState } from "react";
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { ThemedButton } from "./ThemedButton";
+import {
+  Alert,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { ThemedButtonIcon } from "./ThemedButtonIcon";
 import { ThemedText } from "./ThemedText";
 
 interface NoteDetailsProps {
@@ -21,15 +28,11 @@ export const NoteDetails = ({
   refreshNotes,
 }: NoteDetailsProps) => {
   const { user } = useAuthProvider();
-  const [title, setTitle] = useState("");
-  const [text, setText] = useState("");
-  const [icon, setIcon] = useState("📝");
   const [isLoading, setIsLoading] = useState(false);
 
-  const backgroundColor = useThemeColor({}, "background");
   const textColor = useThemeColor({}, "text");
-  const tintColor = useThemeColor({}, "tint");
-  const placeholderTextColor = useThemeColor({}, "icon"); // Or another subtle color
+  const deleteColor = useThemeColor({}, "error");
+  const iconColor = useThemeColor({}, "icon"); // Or another subtle color
 
   const handleDeleteNote = async () => {
     if (!user) {
@@ -39,50 +42,54 @@ export const NoteDetails = ({
 
     setIsLoading(true);
     try {
-      const notesCollectionRef = collection(
-        db,
-        "users",
-        user.uid,
-        "diaryNotes"
-      );
+      const docRef = doc(db, "users", user.uid, "diaryNotes", note.id);
+      await deleteDoc(docRef);
 
-      await addDoc(notesCollectionRef, {});
-      Alert.alert("Success", "Note deleted successfully!");
-      setTitle("");
-      setText("");
-      setIcon("📝");
-
-      onClose(); // Close the form after saving
-      refreshNotes(); // Update the notes after saving new note
+      onClose(); // Close the form after delete
+      refreshNotes(); // Update the notes after deleting new note
     } catch (error) {
-      console.error("Error saving note: ", error);
+      console.error("Error Deleting note: ", error);
       Alert.alert("Error", "Could not delete the note. Please try again.");
     } finally {
       setIsLoading(false);
     }
   };
 
-  // TODO: Center date - Add text and deletion process
   return (
     <ThemedView style={styles.container}>
       <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-        <Ionicons name="close-circle" size={30} color={tintColor} />
+        <Ionicons name="close-circle" size={30} color={deleteColor} />
       </TouchableOpacity>
       <View style={styles.header}>
         {/* Icon on the left */}
-        <View style={styles.iconContainer}>
-          <Text style={styles.noteIcon}>{note.icon || "📝"}</Text>
+        <View style={styles.labelContainer}>
+          <View style={styles.iconContainer}>
+            <Text style={[styles.noteIcon, { color: textColor }]}>
+              {note.icon || "📝"}
+            </Text>
+          </View>
+          <ThemedText type="title">{note.title}</ThemedText>
         </View>
-        <ThemedText type="title">{note.title}</ThemedText>
+        <ThemedText type="caption" style={{ textAlign: "center" }}>
+          {new Date(note.date.seconds * 1000).toLocaleDateString()}
+        </ThemedText>
       </View>
-      <ThemedText type="caption">
-        {new Date(note.date.seconds * 1000).toLocaleDateString()}
-      </ThemedText>
-      <ThemedButton
+
+      {note.text.length > 200 ? (
+        <ScrollView>
+          <ThemedText>{note.text}</ThemedText>
+        </ScrollView>
+      ) : (
+        <View>
+          <ThemedText>{note.text}</ThemedText>
+        </View>
+      )}
+      <ThemedButtonIcon
+        icon={<Ionicons name="trash" size={30} color={iconColor} />}
         title={isLoading ? "Deleting..." : "Delete Note"}
         onPress={handleDeleteNote}
         disabled={isLoading}
-        style={styles.deleteButton}
+        style={[styles.deleteButton, { backgroundColor: deleteColor }]}
       />
     </ThemedView>
   );
@@ -93,13 +100,18 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 10,
     margin: 20,
+    gap: 5,
     minWidth: "90%",
   },
   header: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  labelContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 20,
   },
   iconContainer: {
     width: 50,
@@ -123,6 +135,7 @@ const styles = StyleSheet.create({
   },
   deleteButton: {
     paddingVertical: 15,
+    marginTop: 20,
   },
   closeButton: {
     position: "absolute",

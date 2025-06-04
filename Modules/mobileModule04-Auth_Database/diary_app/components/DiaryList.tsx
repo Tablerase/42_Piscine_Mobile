@@ -1,3 +1,4 @@
+import { theme } from "@/constants/theme";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { useAuthProvider } from "@/utils/AuthProvider";
 import { db, DiaryNote } from "@/utils/firebaseConfig";
@@ -27,44 +28,53 @@ const renderNoteItem = ({
   setCurrentModal: (modal: "read" | "edit") => void;
   setIsModalVisible: (visible: boolean) => void;
   setCurrentNote: (note: DiaryNote) => void;
-}) => (
-  <TouchableOpacity
-    style={styles.noteItem}
-    onPress={() => {
-      setCurrentNote(item);
-      setCurrentModal("read");
-      setIsModalVisible(true);
-    }}
-  >
-    {/* Icon on the left */}
-    <View style={styles.iconContainer}>
-      <Text style={styles.noteIcon}>{item.icon || "📝"}</Text>
-    </View>
+}) => {
+  const borderBottomColor = theme.colors.neutral.light;
+  return (
+    <TouchableOpacity
+      style={[styles.noteItem, { borderBottomColor: borderBottomColor }]}
+      onPress={() => {
+        setCurrentNote(item);
+        setCurrentModal("read");
+        setIsModalVisible(true);
+      }}
+    >
+      {/* Icon on the left */}
+      <View style={styles.iconContainer}>
+        <Text style={styles.noteIcon}>{item.icon || "📝"}</Text>
+      </View>
 
-    {/* Content in the middle */}
-    <View style={styles.contentContainer}>
-      <ThemedText type="subtitle" style={styles.noteTitle}>
-        {item.title}
-      </ThemedText>
-      <ThemedText style={styles.noteText}>
-        {item.text.substring(0, 80)}
-        {item.text.length > 80 ? "..." : ""}
-      </ThemedText>
-    </View>
-
-    {/* Date on the right */}
-    <View style={styles.dateContainer}>
-      {item.date && (
-        <ThemedText type="caption" style={styles.noteDate}>
-          {new Date(item.date.seconds * 1000).toLocaleDateString("en-US", {
-            month: "short",
-            day: "numeric",
-          })}
+      {/* Content in the middle */}
+      <View style={styles.contentContainer}>
+        <ThemedText
+          type="subtitle"
+          style={[
+            styles.noteTitle,
+            { color: theme.colors.primary.contrastText },
+          ]}
+        >
+          {item.title}
         </ThemedText>
-      )}
-    </View>
-  </TouchableOpacity>
-);
+        <ThemedText style={styles.noteText}>
+          {item.text.substring(0, 80)}
+          {item.text.length > 80 ? "..." : ""}
+        </ThemedText>
+      </View>
+
+      {/* Date on the right */}
+      <View style={styles.dateContainer}>
+        {item.date && (
+          <ThemedText type="caption" style={styles.noteDate}>
+            {new Date(item.date.seconds * 1000).toLocaleDateString("en-US", {
+              month: "short",
+              day: "numeric",
+            })}
+          </ThemedText>
+        )}
+      </View>
+    </TouchableOpacity>
+  );
+};
 
 export const DiaryList = () => {
   const { user } = useAuthProvider();
@@ -192,7 +202,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 15,
     borderBottomWidth: 1,
-    borderBottomColor: "#eee",
     marginHorizontal: 10,
     minHeight: 80,
   },
