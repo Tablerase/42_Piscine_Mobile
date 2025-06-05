@@ -60,7 +60,7 @@ export const GoogleAuth = () => {
 
       return userCredential;
     } catch (error) {
-      console.error("Google sign in error:", error);
+      console.log("Google sign in error:", error);
       setIsLoading(false);
       throw error;
     }
@@ -72,7 +72,7 @@ export const GoogleAuth = () => {
       console.log("Google called");
       await onGoogleButtonPress();
     } catch (error) {
-      console.error("Sign in failed:", error);
+      console.log("Sign in failed:", error);
       // You might want to show an error message to the user here
     }
   };

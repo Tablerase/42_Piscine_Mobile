@@ -1,8 +1,10 @@
 import { FirebaseApp, getApp, getApps, initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { browserLocalPersistence, initializeAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
-// Persistence issues with Expo/Metro and Firebase - unresolved at time of commit: https://github.com/firebase/firebase-js-sdk/issues/8798
+// ! Issues with persistency Metro/Expo and Firebase - not resolved at time of commit: https://github.com/firebase/firebase-js-sdk/issues/8798
+// Refresh token: expires only at user deleted or disabled
+// Id token: last for an hour
 
 // Initialize Firebase
 const firebaseConfig = {
@@ -20,16 +22,20 @@ let app: FirebaseApp;
 if (getApps().length === 0) {
   app = initializeApp(firebaseConfig);
 } else {
-  app = getApp();
+  app = getApp(); // Use the existing app
 }
 
-export { app };
+export { app }; // Export the app instance
 
-export const auth = getAuth(app);
+// Initialize Auth with persistence
+export const auth = initializeAuth(app, {
+  persistence: browserLocalPersistence,
+});
 
 export const db = getFirestore(app);
 
 // Firestore
+
 export interface DiaryNote {
   id: string;
   title: string;

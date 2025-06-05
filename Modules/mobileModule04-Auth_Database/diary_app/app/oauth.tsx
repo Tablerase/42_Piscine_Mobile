@@ -6,11 +6,13 @@ import { router, useLocalSearchParams } from "expo-router";
 import {
   getAuth,
   GithubAuthProvider,
-  GoogleAuthProvider,
   signInWithCredential,
 } from "firebase/auth";
 import { useEffect, useRef } from "react";
 import { ActivityIndicator } from "react-native";
+
+// ! Token manualy handle here because of firebase / metro / react native compatibility issues
+// ! not resolved by expo/rn/firebase at time of commit
 
 const exchangeCodeForToken = async (code: string) => {
   try {
@@ -42,38 +44,6 @@ const exchangeCodeForToken = async (code: string) => {
     }
   } catch (error) {
     console.error("Token exchange error:", error);
-    throw error;
-  }
-};
-
-const exchangeGoogleCodeForToken = async (code: string) => {
-  try {
-    const response = await fetch("https://oauth2.googleapis.com/token", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: new URLSearchParams({
-        client_id: process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID!,
-        client_secret: process.env.EXPO_PUBLIC_GOOGLE_CLIENT_SECRET!,
-        code: code,
-        grant_type: "authorization_code",
-        redirect_uri: "diaryapp://oauth",
-      }).toString(),
-    });
-
-    const data = await response.json();
-    console.log("Google token exchange response:", data);
-
-    if (data.access_token) {
-      return data.access_token;
-    } else {
-      throw new Error(
-        `Google token exchange failed: ${data.error_description || data.error}`
-      );
-    }
-  } catch (error) {
-    console.error("Google token exchange error:", error);
     throw error;
   }
 };
@@ -120,30 +90,6 @@ export default function OAuthCallback() {
           } catch (error: any) {
             console.log("Github error: ", error);
             setError(`Github login error: ${error.message}`);
-            router.replace("/login");
-          }
-        } else if (
-          currentProvider === Provider.google ||
-          currentProvider === "google"
-        ) {
-          try {
-            // Exchange code for access token
-            const accessToken = await exchangeGoogleCodeForToken(
-              params.code.toString()
-            );
-            console.log("Google access token received:", accessToken);
-
-            // Create credential with access token
-            const cred = GoogleAuthProvider.credential(null, accessToken);
-            console.log("Google cred:", cred);
-
-            const auth = getAuth();
-            const res = await signInWithCredential(auth, cred);
-            console.log("Google sign in successful:", res);
-            // Don't manually navigate - let AuthProvider handle it
-          } catch (error: any) {
-            console.log("Google error: ", error);
-            setError(`Google login error: ${error.message}`);
             router.replace("/login");
           }
         }

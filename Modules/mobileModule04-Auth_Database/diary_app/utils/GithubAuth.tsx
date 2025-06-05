@@ -6,6 +6,8 @@ import * as WebBrowser from "expo-web-browser";
 import { useEffect } from "react";
 import { Provider, useAuthProvider } from "./AuthProvider";
 
+// ! Here handling on client because of project limitations (no backend - only firebase)
+
 const githubClientId = process.env.EXPO_PUBLIC_GITHUB_CLIENT_FIREBASE_ID;
 
 // Endpoint
