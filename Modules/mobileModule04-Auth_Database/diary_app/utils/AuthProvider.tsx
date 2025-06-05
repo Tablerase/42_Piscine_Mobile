@@ -57,13 +57,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [initialAuthCheck, setInitialAuthCheck] = useState<boolean>(false);
   const router = useRouter();
 
-  // Attempt auto-sign in with stored credentials
   const attemptAutoSignIn = async () => {
     try {
-      setIsLoading(true);
       const { refreshToken, provider: storedProvider } =
         await getStoredAuthCredentials();
 
@@ -72,103 +69,102 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           "Found stored credentials, attempting auto sign-in with provider:",
           storedProvider
         );
-        setProvider(storedProvider); // Set provider state early
+        setProvider(storedProvider);
 
         if (storedProvider === Provider.google) {
           const webClientId =
             process.env.EXPO_PUBLIC_GOOGLE_FIREBASE_WEB_CLIENT_ID;
           if (!webClientId) {
             console.error("Google Web Client ID is not configured.");
-            setIsLoading(false);
-            return;
-          }
-          GoogleSignin.configure({ webClientId });
+          } else {
+            GoogleSignin.configure({ webClientId });
+            try {
+              console.log("Attempting Google silent sign-in...");
+              await GoogleSignin.hasPlayServices({
+                showPlayServicesUpdateDialog: true,
+              });
+              const userInfo = await GoogleSignin.signInSilently();
+              const idToken = userInfo.data?.idToken;
 
-          try {
-            console.log("Attempting Google silent sign-in...");
-            await GoogleSignin.hasPlayServices({
-              showPlayServicesUpdateDialog: true,
-            });
-            const userInfo = await GoogleSignin.signInSilently();
-            const idToken = userInfo.data?.idToken;
-
-            if (idToken) {
-              console.log("Google silent sign-in successful, got ID token.");
-              const googleCredential = GoogleAuthProvider.credential(idToken);
-              await signInWithCredential(auth, googleCredential);
-              // onAuthStateChanged will handle setting user, isLoggedIn, and setIsLoading(false)
-              console.log(
-                "Firebase sign-in with Google credential successful (via silent)."
-              );
-            } else {
-              console.log("Google silent sign-in did not return an ID token.");
-              // Potentially clear stored credentials if silent sign-in fails consistently
-              // await clearStoredAuthCredentials();
-              setIsLoading(false);
+              if (idToken) {
+                console.log("Google silent sign-in successful, got ID token.");
+                const googleCredential = GoogleAuthProvider.credential(idToken);
+                await signInWithCredential(auth, googleCredential);
+                console.log(
+                  "Firebase sign-in with Google credential successful (via silent)."
+                );
+              } else {
+                console.log(
+                  "Google silent sign-in did not return an ID token."
+                );
+              }
+            } catch (error: any) {
+              console.error("Google silent sign-in failed:", error.message);
             }
-          } catch (error: any) {
-            console.error("Google silent sign-in failed:", error.message);
-            // If error code is SIGN_IN_REQUIRED, it's expected if user needs to sign in manually.
-            // Maybe clear stored credentials if they are clearly invalid.
-            // await clearStoredAuthCredentials();
-            setIsLoading(false);
           }
         } else if (storedProvider === Provider.github) {
           console.log(
             "GitHub provider stored. Relying on Firebase SDK for session restoration."
           );
+          // For GitHub, Firebase often handles session restoration automatically if user was previously signed in.
+          // Explicitly trying to re-authenticate with a stored GitHub token might be complex
+          // and often not needed if Firebase's persistence is working.
           try {
-            const cred = GithubAuthProvider.credential(refreshToken);
+            const cred = GithubAuthProvider.credential(refreshToken); // This might not be the correct way to use a GitHub refresh token directly
             console.log("Github auto sign cred:", cred);
 
             const res = await signInWithCredential(auth, cred);
-            await storeAuthCredentials(refreshToken, Provider.github);
+            // Storing refreshToken again might be redundant if Firebase handles session
+            // await storeAuthCredentials(refreshToken, Provider.github);
             console.log("Github auto sign in successful:", res);
-
-            setIsLoading(false);
           } catch (error: any) {
             console.error("Github auto sign error: ", error);
           }
         } else {
           console.log("Stored provider is not Google or GitHub.");
-          setIsLoading(false);
         }
       } else {
         console.log("No stored credentials found for auto sign-in.");
-        setIsLoading(false);
       }
     } catch (error: any) {
       console.error("Auto sign-in attempt failed:", error);
-      // Clear potentially invalid credentials
-      await clearStoredAuthCredentials();
-      setIsLoading(false);
+      await clearStoredAuthCredentials(); // Clear potentially invalid credentials on error
+    } finally {
+      setIsLoading(false); // Crucial: set isLoading to false after the attempt
+      console.log("AttemptAutoSignIn finished, isLoading set to false.");
     }
   };
 
   // Check for stored credentials on app launch
   useEffect(() => {
-    if (!initialAuthCheck) {
-      attemptAutoSignIn();
-      setInitialAuthCheck(true);
-    }
-  }, [initialAuthCheck]);
+    // This effect runs once on mount to attempt auto sign-in
+    attemptAutoSignIn();
+  }, []); // Empty dependency array ensures it runs once
 
   // Monitor auth state
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      setUser(user);
-
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      setUser(firebaseUser);
       console.log(
         "User state changed (onAuthStateChanged):",
-        user ? user : null
+        firebaseUser ? firebaseUser.uid : null
       );
-      if (user) {
+
+      // If initial loading is still in progress, defer actions
+      if (isLoading) {
+        console.log(
+          "Auth state changed, but initial loading is in progress. Deferring actions."
+        );
+        return;
+      }
+
+      if (firebaseUser) {
         // Login
         setIsLoggedIn(true);
 
         let determinedProvider: Provider | null = null;
-        if (user.providerData && user.providerData.length > 0) {
-          const firebaseProviderId = user.providerData[0]?.providerId;
+        if (firebaseUser.providerData && firebaseUser.providerData.length > 0) {
+          const firebaseProviderId = firebaseUser.providerData[0]?.providerId;
           if (firebaseProviderId === "google.com") {
             determinedProvider = Provider.google;
           } else if (firebaseProviderId === "github.com") {
@@ -176,54 +172,51 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           }
         }
 
+        // Update provider state if it's determined and different
         if (determinedProvider && provider !== determinedProvider) {
           setProvider(determinedProvider);
         }
         const providerToStore = determinedProvider || provider;
 
         // Store refresh token when user successfully signs in
-        if (user.refreshToken && providerToStore) {
-          if (providerToStore === Provider.google)
-            await storeAuthCredentials(user.refreshToken, providerToStore);
-          else if (providerToStore === Provider.github) {
-            console.log("github credentials already saved");
+        // Ensure firebaseUser.refreshToken is available and makes sense for the provider
+        if (firebaseUser.refreshToken && providerToStore) {
+          if (providerToStore === Provider.google) {
+            await storeAuthCredentials(
+              firebaseUser.refreshToken,
+              providerToStore
+            );
+          } else if (providerToStore === Provider.github) {
+            // Maybe change here when async storage and session persistancy issues is fixed by expo/metro/firebase dev
           }
         }
 
-        // Only navigate if we're not already on the home page
-        if (router.canGoBack() || window.location?.pathname !== "/profile") {
-          if (typeof window !== "undefined" && window.location?.pathname) {
-            if (window.location.pathname !== "/profile") {
-              router.replace("/profile");
-            }
-          } else if (router.canGoBack()) {
-            // Fallback for native if path check is not robust
-            router.replace("/profile");
-          }
+        if (window.location.pathname !== "/profile") {
+          console.log(
+            "User is logged in (post-initial load), redirecting to /profile."
+          );
+          router.replace("/profile");
         }
       } else {
-        // Logout
-
+        // Logout or user is null after initial check
         setIsLoggedIn(false);
-        // Clear stored credentials when user signs out or session expires
+        // Clear stored credentials only when definitively logged out (i.e., not during initial load)
         await clearStoredAuthCredentials();
+        console.log("User is null (post-initial load), credentials cleared.");
 
         if (typeof window !== "undefined" && window.location?.pathname) {
           if (window.location.pathname !== "/login") {
+            console.log(
+              "User is null (post-initial load), redirecting to /login."
+            );
             router.replace("/login");
           }
         }
       }
-
-      // Set loading to false after initial auth check logic has run
-      // and onAuthStateChanged has provided the current user state.
-      if (initialAuthCheck) {
-        setIsLoading(false);
-      }
     });
 
     return () => unsubscribe();
-  }, [router, provider, initialAuthCheck]);
+  }, [router, provider, isLoading]);
 
   const login = async (token: string) => {
     console.log("Login method called - but auth is handled in oauth component");
@@ -231,17 +224,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const logout = async () => {
     try {
-      await signOut(auth);
+      await signOut(auth); // This will trigger onAuthStateChanged with null user
       if (provider === Provider.google) {
-        GoogleSignin.signOut();
+        await GoogleSignin.signOut();
       }
 
       // Clear stored credentials on logout
       await clearStoredAuthCredentials();
 
       setProvider(null);
-      setIsLoggedIn(false);
-      console.log("User logged out");
+      // setIsLoggedIn(false); // onAuthStateChanged will handle this
+      console.log("User logged out successfully.");
     } catch (error: any) {
       console.error("Logout error:", error);
       setError(`Logout error: ${error.message}`);

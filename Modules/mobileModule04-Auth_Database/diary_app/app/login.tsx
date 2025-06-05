@@ -5,19 +5,18 @@ import { GithubAuth } from "@/utils/GithubAuth";
 import { GoogleAuth } from "@/utils/GoogleAuth";
 import { ImageBackground } from "expo-image";
 import { useRouter } from "expo-router";
-import { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 
 export default function Login() {
   const { isLoggedIn, isLoading } = useAuthProvider();
   const router = useRouter();
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      console.log("Login: User already logged");
-      router.replace("/profile");
-    }
-  }, [isLoggedIn, router]);
+  // useEffect(() => {
+  //   if (isLoggedIn) {
+  //     console.log("Login: User already logged");
+  //     router.replace("/profile");
+  //   }
+  // }, [isLoggedIn, router]);
 
   return (
     <ImageBackground
