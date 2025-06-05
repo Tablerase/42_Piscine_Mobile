@@ -4,7 +4,7 @@ import { Alert, StyleSheet, TouchableOpacity, View } from "react-native";
 
 const blurhash = "JeJIRvsD~EWVxaba";
 
-export default function App() {
+export default function TestImage() {
   const handleButtonPress = (buttonName: string) => {
     Alert.alert("Button Pressed", `${buttonName} was pressed!`);
   };

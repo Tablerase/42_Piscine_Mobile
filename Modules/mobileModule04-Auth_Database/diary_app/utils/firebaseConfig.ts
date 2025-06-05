@@ -1,6 +1,8 @@
 import { FirebaseApp, getApp, getApps, initializeApp } from "firebase/app";
-import { browserLocalPersistence, initializeAuth } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
+
+// Persistence issues with Expo/Metro and Firebase - unresolved at time of commit: https://github.com/firebase/firebase-js-sdk/issues/8798
 
 // Initialize Firebase
 const firebaseConfig = {
@@ -18,20 +20,16 @@ let app: FirebaseApp;
 if (getApps().length === 0) {
   app = initializeApp(firebaseConfig);
 } else {
-  app = getApp(); // Use the existing app
+  app = getApp();
 }
 
-export { app }; // Export the app instance
+export { app };
 
-// Initialize Auth with persistence
-export const auth = initializeAuth(app, {
-  persistence: browserLocalPersistence,
-});
+export const auth = getAuth(app);
 
 export const db = getFirestore(app);
 
 // Firestore
-
 export interface DiaryNote {
   id: string;
   title: string;

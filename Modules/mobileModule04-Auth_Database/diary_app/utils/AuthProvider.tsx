@@ -9,13 +9,6 @@ export enum Provider {
   github = "Github",
 }
 
-// export interface User {
-//   id: string;
-//   email: string;
-//   name: string;
-//   avatar?: string;
-// }
-
 export interface AuthState {
   // Provider used
   provider: Provider.github | Provider.google | null;
@@ -59,7 +52,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       console.log("User state changed", user);
       if (user) {
-        // TODO: Add persistancy to user state
+        // TODO: Add persistancy to user state with expo
         setIsLoggedIn(true);
         // Only navigate if we're not already on the home page
         if (router.canGoBack() || window.location?.pathname !== "/profile") {
