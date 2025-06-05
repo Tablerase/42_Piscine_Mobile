@@ -1,7 +1,7 @@
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { useRouter } from "expo-router";
-import * as SecureStore from "expo-secure-store";
 import {
+  GithubAuthProvider,
   GoogleAuthProvider,
   onAuthStateChanged,
   signInWithCredential,
@@ -10,6 +10,11 @@ import {
 } from "firebase/auth";
 import { createContext, useContext, useEffect, useState } from "react";
 import { auth } from "./firebaseConfig";
+import {
+  clearStoredAuthCredentials,
+  getStoredAuthCredentials,
+  storeAuthCredentials,
+} from "./storeManager";
 
 // ! Token manualy handle here because of firebase / metro / react native compatibility issues
 // ! not resolved by expo/rn/firebase at time of commit
@@ -54,45 +59,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [error, setError] = useState<string | null>(null);
   const [initialAuthCheck, setInitialAuthCheck] = useState<boolean>(false);
   const router = useRouter();
-
-  // Store auth credentials securely
-  const storeAuthCredentials = async (
-    refreshToken: string,
-    providerType: Provider
-  ) => {
-    try {
-      await SecureStore.setItemAsync("auth_refresh_token", refreshToken);
-      await SecureStore.setItemAsync("auth_provider", providerType);
-      console.log("Auth credentials stored securely");
-    } catch (error) {
-      console.error("Error storing auth credentials:", error);
-    }
-  };
-
-  // Retrieve stored auth credentials
-  const getStoredAuthCredentials = async () => {
-    try {
-      const refreshToken = await SecureStore.getItemAsync("auth_refresh_token");
-      const storedProvider = (await SecureStore.getItemAsync(
-        "auth_provider"
-      )) as Provider;
-      return { refreshToken, provider: storedProvider };
-    } catch (error) {
-      console.error("Error retrieving auth credentials:", error);
-      return { refreshToken: null, provider: null };
-    }
-  };
-
-  // Clear stored auth credentials
-  const clearStoredAuthCredentials = async () => {
-    try {
-      await SecureStore.deleteItemAsync("auth_refresh_token");
-      await SecureStore.deleteItemAsync("auth_provider");
-      console.log("Auth credentials cleared");
-    } catch (error) {
-      console.error("Error clearing auth credentials:", error);
-    }
-  };
 
   // Attempt auto-sign in with stored credentials
   const attemptAutoSignIn = async () => {
@@ -148,14 +114,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             setIsLoading(false);
           }
         } else if (storedProvider === Provider.github) {
-          // GitHub OAuth typically requires a redirect flow, so silent client-side re-auth
-          // without a backend to exchange codes for tokens is complex.
-          // Rely on Firebase's default session persistence via onAuthStateChanged.
           console.log(
             "GitHub provider stored. Relying on Firebase SDK for session restoration."
           );
-          // onAuthStateChanged will later update isLoading if it restores a session.
-          setIsLoading(false);
+          try {
+            const cred = GithubAuthProvider.credential(refreshToken);
+            console.log("Github auto sign cred:", cred);
+
+            const res = await signInWithCredential(auth, cred);
+            await storeAuthCredentials(refreshToken, Provider.github);
+            console.log("Github auto sign in successful:", res);
+
+            setIsLoading(false);
+          } catch (error: any) {
+            console.error("Github auto sign error: ", error);
+          }
         } else {
           console.log("Stored provider is not Google or GitHub.");
           setIsLoading(false);
@@ -187,9 +160,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       console.log(
         "User state changed (onAuthStateChanged):",
-        user ? user.uid : null
+        user ? user : null
       );
       if (user) {
+        // Login
         setIsLoggedIn(true);
 
         let determinedProvider: Provider | null = null;
@@ -202,26 +176,22 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           }
         }
 
-        // Update context provider state if a provider was determined from user object
-        // and it's different from current context provider state.
-        // This is useful if the session is restored before any explicit login action sets the provider.
         if (determinedProvider && provider !== determinedProvider) {
           setProvider(determinedProvider);
         }
-
-        // For storing credentials, prioritize the provider determined from user object.
-        // Fallback to context's 'provider' state if determination failed (e.g. custom token, phone auth not handled above)
-        // or during an active login flow where context 'provider' was set explicitly.
         const providerToStore = determinedProvider || provider;
 
         // Store refresh token when user successfully signs in
         if (user.refreshToken && providerToStore) {
-          await storeAuthCredentials(user.refreshToken, providerToStore);
+          if (providerToStore === Provider.google)
+            await storeAuthCredentials(user.refreshToken, providerToStore);
+          else if (providerToStore === Provider.github) {
+            console.log("github credentials already saved");
+          }
         }
 
         // Only navigate if we're not already on the home page
         if (router.canGoBack() || window.location?.pathname !== "/profile") {
-          // Check if current route is defined, useful for web
           if (typeof window !== "undefined" && window.location?.pathname) {
             if (window.location.pathname !== "/profile") {
               router.replace("/profile");
@@ -232,19 +202,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           }
         }
       } else {
+        // Logout
+
         setIsLoggedIn(false);
         // Clear stored credentials when user signs out or session expires
         await clearStoredAuthCredentials();
 
-        // Only navigate to login if we're not already there
         if (typeof window !== "undefined" && window.location?.pathname) {
           if (window.location.pathname !== "/login") {
             router.replace("/login");
           }
-        } else {
-          // For native, this check might need adjustment or rely on initial route.
-          // Consider if navigation is always needed or if initial route handles it.
-          // router.replace("/login"); // Be cautious with unconditional replace on native
         }
       }
 
@@ -256,7 +223,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     });
 
     return () => unsubscribe();
-  }, [router, provider, initialAuthCheck]); // Keep dependencies, setProvider is stable
+  }, [router, provider, initialAuthCheck]);
 
   const login = async (token: string) => {
     console.log("Login method called - but auth is handled in oauth component");

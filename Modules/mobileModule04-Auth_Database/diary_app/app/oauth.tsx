@@ -2,6 +2,7 @@ import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { Provider, useAuthProvider } from "@/utils/AuthProvider";
+import { storeAuthCredentials } from "@/utils/storeManager";
 import { router, useLocalSearchParams } from "expo-router";
 import {
   getAuth,
@@ -80,12 +81,13 @@ export default function OAuthCallback() {
             console.log("Access token received:", accessToken);
 
             // Create credential with access token
+            await storeAuthCredentials(accessToken, Provider.github);
             const cred = GithubAuthProvider.credential(accessToken);
             console.log("Github cred:", cred);
 
             const auth = getAuth();
             const res = await signInWithCredential(auth, cred);
-            console.log("Sign in successful:", res);
+            console.log("Gihtub sign in successful:", res);
             // Don't manually navigate - let AuthProvider handle it
           } catch (error: any) {
             console.log("Github error: ", error);

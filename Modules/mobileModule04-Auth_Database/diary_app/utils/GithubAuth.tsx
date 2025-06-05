@@ -7,6 +7,8 @@ import { useEffect } from "react";
 import { Provider, useAuthProvider } from "./AuthProvider";
 
 // ! Here handling on client because of project limitations (no backend - only firebase)
+// Github scopes: https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/scopes-for-oauth-apps
+// Github oauth api: https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps
 
 const githubClientId = process.env.EXPO_PUBLIC_GITHUB_CLIENT_FIREBASE_ID;
 
@@ -31,7 +33,7 @@ export const GithubAuth = () => {
   const [request, response, promptAsync] = useAuthRequest(
     {
       clientId: githubClientId!,
-      scopes: ["identity"],
+      scopes: ["identity", "user"],
       redirectUri: redirectUri,
     },
     discovery
