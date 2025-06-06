@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
   newNote: {
     position: "absolute",
     alignSelf: "center",
-    bottom: 100,
+    bottom: 40,
     zIndex: 2,
   },
   modalOverlay: {

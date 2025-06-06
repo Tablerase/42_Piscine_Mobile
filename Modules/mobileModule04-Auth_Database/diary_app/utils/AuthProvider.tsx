@@ -1,5 +1,5 @@
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
-import { useRouter } from "expo-router";
+import { SplashScreen, useRouter } from "expo-router";
 import {
   GithubAuthProvider,
   GoogleAuthProvider,
@@ -50,6 +50,8 @@ export interface AuthState {
 }
 
 const AuthContext = createContext<AuthState | undefined>(undefined);
+
+SplashScreen.preventAutoHideAsync();
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [provider, setProvider] = useState<Provider | null>(null);
@@ -111,12 +113,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           // and often not needed if Firebase's persistence is working.
           try {
             const cred = GithubAuthProvider.credential(refreshToken); // This might not be the correct way to use a GitHub refresh token directly
-            console.log("Github auto sign cred:", cred);
+            console.log("Github auto sign credential created");
 
-            const res = await signInWithCredential(auth, cred);
+            await signInWithCredential(auth, cred);
             // Storing refreshToken again might be redundant if Firebase handles session
             // await storeAuthCredentials(refreshToken, Provider.github);
-            console.log("Github auto sign in successful:", res);
+            console.log("Github auto sign in successful");
           } catch (error: any) {
             console.error("Github auto sign error: ", error);
           }
@@ -157,7 +159,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         );
         return;
       }
-
       if (firebaseUser) {
         // Login
         setIsLoggedIn(true);
@@ -191,27 +192,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           }
         }
 
-        if (window.location.pathname !== "/profile") {
-          console.log(
-            "User is logged in (post-initial load), redirecting to /profile."
-          );
-          router.replace("/profile");
-        }
+        console.log(
+          "User is logged in (post-initial load), redirecting to /profile."
+        );
+        SplashScreen.hideAsync();
+        router.replace("/profile");
       } else {
         // Logout or user is null after initial check
         setIsLoggedIn(false);
         // Clear stored credentials only when definitively logged out (i.e., not during initial load)
         await clearStoredAuthCredentials();
         console.log("User is null (post-initial load), credentials cleared.");
-
-        if (typeof window !== "undefined" && window.location?.pathname) {
-          if (window.location.pathname !== "/login") {
-            console.log(
-              "User is null (post-initial load), redirecting to /login."
-            );
-            router.replace("/login");
-          }
-        }
+        console.log("User is null (post-initial load), redirecting to /login.");
+        SplashScreen.hideAsync();
+        router.replace("/login");
       }
     });
 

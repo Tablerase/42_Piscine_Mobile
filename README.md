@@ -528,9 +528,22 @@ In iOS, permissions are defined in the `Info.plist` file. This file is located i
 
 [React Native - Navigation](https://reactnavigation.org/docs/getting-started/)
 
+- Videos:
+  - 🎥[Router and Navigation](https://youtube.com/playlist?list=PLsXDmrmFV_AT17JDf-otXSNE_eH7s0uDD&si=lfvAzkEvD5mL4Z0_)
+
 ```bash
 # Manual redirect with uri-scheme
 npx uri-scheme open your_app://your_redirect --android
+```
+
+```bash
+# Check uri mapping
+npx uri-scheme list
+```
+
+```bash
+# Check expo router site mapping
+npx expo-router-sitemap
 ```
 
 ### Building

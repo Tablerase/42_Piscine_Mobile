@@ -21,6 +21,8 @@ interface NewNoteFormProps {
   refreshNotes: () => void; // Fetched the notes
 }
 
+// TODO: Update emojis to selector of emotions emojis
+
 export const NewNoteForm = ({ onClose, refreshNotes }: NewNoteFormProps) => {
   const { user } = useAuthProvider();
   const [title, setTitle] = useState("");

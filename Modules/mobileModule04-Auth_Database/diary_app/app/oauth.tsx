@@ -34,7 +34,6 @@ const exchangeCodeForToken = async (code: string) => {
     );
 
     const data = await response.json();
-    console.log("Token exchange response:", data);
 
     if (data.access_token) {
       return data.access_token;
@@ -60,35 +59,24 @@ export default function OAuthCallback() {
       if (processingRef.current) return;
       processingRef.current = true;
 
-      console.log("OAuth callback received:", params);
-
-      // Get provider from URL params or context
       const currentProvider = params.provider || contextProvider;
 
       // Handle the OAuth response here
       if (params.code) {
-        console.log("Authorization code received:", params.code);
-
         if (
           currentProvider === Provider.github ||
           currentProvider === "github"
         ) {
           try {
-            // Exchange code for access token
             const accessToken = await exchangeCodeForToken(
               params.code.toString()
             );
-            console.log("Access token received:", accessToken);
 
-            // Create credential with access token
             await storeAuthCredentials(accessToken, Provider.github);
             const cred = GithubAuthProvider.credential(accessToken);
-            console.log("Github cred:", cred);
 
             const auth = getAuth();
-            const res = await signInWithCredential(auth, cred);
-            console.log("Gihtub sign in successful:", res);
-            // Don't manually navigate - let AuthProvider handle it
+            await signInWithCredential(auth, cred);
           } catch (error: any) {
             console.log("Github error: ", error);
             setError(`Github login error: ${error.message}`);
@@ -96,6 +84,7 @@ export default function OAuthCallback() {
           }
         }
       } else if (params.error) {
+        console.log("Github error: ", params.error);
         setError(`Oauth error: ${params.error}`);
         router.replace("/login");
       }
