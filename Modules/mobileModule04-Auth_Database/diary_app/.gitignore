@@ -2,6 +2,9 @@
 
 # dependencies
 node_modules/
+npm-debug.*
+yarn-debug.*
+yarn-error.*
 
 # Expo
 .expo/
@@ -14,10 +17,9 @@ google-services.json
 google-services.json.*
 
 # Android/IntelliJ
-#
 build/
-.idea
-.gradle
+.idea/
+.gradle/
 local.properties
 *.iml
 *.hprof
@@ -25,13 +27,15 @@ local.properties
 *.keystore
 !debug.keystore
 .kotlin/
+android/.project
+android/.classpath
+android/.settings/
+android/app/google-services.json
 
 # OSX
-#
 .DS_Store
 
 # Xcode
-#
 build/
 *.pbxuser
 !default.pbxuser
@@ -41,10 +45,10 @@ build/
 !default.mode2v3
 *.perspectivev3
 !default.perspectivev3
-xcuserdata
+xcuserdata/
 *.xccheckout
 *.moved-aside
-DerivedData
+DerivedData/
 *.hmap
 *.ipa
 *.xcuserstate
@@ -53,10 +57,10 @@ DerivedData
 # iOS
 ios/Pods/
 ios/Podfile.lock
+ios/build/
 GoogleService-Info.plist
 
 # Native
-.kotlin/
 *.orig.*
 *.jks
 *.p8
@@ -67,7 +71,7 @@ GoogleService-Info.plist
 # Metro
 .metro-health-check*
 
-# debug
+# Debugging
 npm-debug.*
 yarn-debug.*
 yarn-error.*
@@ -76,12 +80,61 @@ yarn-error.*
 .DS_Store
 *.pem
 
-# local env files
+# Environment files
 .env
 .env*.local
 .env.production
+.env.staging
+.env.development
 
-# typescript
+# TypeScript
 *.tsbuildinfo
 
+# Testing
+coverage/
+.nyc_output/
+
+# Logs
+logs/
+*.log
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Editor directories and files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Temporary files
+*.tmp
+*.temp
+
+# App specific
 app-example
+
+# EAS Build
+.easignore
+
+# Flipper
+ios/Flipper/
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/
+fastlane/test_output/
+
+# Bundle artifacts
+*.jsbundle
+
+# CocoaPods
+ios/Pods/
+Podfile.lock

@@ -379,9 +379,13 @@ npm install react-native-vector-icons
 
 - Icons sets generators for each different sizes:
 
-  - [Icon Kitchen - App Icon sets generator](https://icon.kitchen/)
-  - [App Icon Generator](https://appicon.co/)
-  - Some edit might be needed with AndroidManifest.xml or Info.plist (or other config file) to make sure the icons files are compatible with OS icons configuration.
+  - Expo:
+    - [ Simple - Expo - App Icon Generator - Favicon, Splash, Icon](https://buildicon.netlify.app/)
+    - Better is Figma template: [Expo - Figma Template - App Icon Generator](https://www.figma.com/community/file/1466490409418563617)
+  - React Native - App Icon Generator:
+    - [Icon Kitchen - App Icon sets generator](https://icon.kitchen/)
+    - [App Icon Generator](https://appicon.co/)
+    - Some edit might be needed with AndroidManifest.xml or Info.plist (or other config file) to make sure the icons files are compatible with OS icons configuration.
 
 - [Good practice for Icon Design](https://nexusmktg.com/app-icon-design-best-practices/#:~:text=All%20icon%20variations%20must%20follow%20the%20same%20image,mask%20to%20round%20the%20corners%20of%20your%20icon.)
 

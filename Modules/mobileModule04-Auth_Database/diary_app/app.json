@@ -17,7 +17,7 @@
       "package": "com.tablerase.diaryapp",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#BC9ECA"
       },
       "intentFilters": [
         {
@@ -43,7 +43,7 @@
         "expo-splash-screen",
         {
           "image": "./assets/images/splash.png",
-          "imageWidth": 200,
+          "imageWidth": 300,
           "backgroundColor": "#BC9ECA"
         }
       ],
