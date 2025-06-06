@@ -14,6 +14,7 @@
 		DCD066D7D2A04C8786C42F95 /* SpaceMono-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1A54E390290B4C1B831927F8 /* SpaceMono-Regular.ttf */; };
 		E3D73F26E2C6477795B59772 /* GloriaHallelujah-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D406378330294A7F8B88CFDE /* GloriaHallelujah-Regular.ttf */; };
 		452E15470B3E483792A10C5D /* PatrickHand-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DEC71E5C9E8D47AB9A252B78 /* PatrickHand-Regular.ttf */; };
+		B17A0E9A22674A5BA9D1E862 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5861C1564E584DDBAC5A688C /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		1A54E390290B4C1B831927F8 /* SpaceMono-Regular.ttf */ = {isa = PBXFileReference; name = "SpaceMono-Regular.ttf"; path = "../assets/fonts/SpaceMono-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		D406378330294A7F8B88CFDE /* GloriaHallelujah-Regular.ttf */ = {isa = PBXFileReference; name = "GloriaHallelujah-Regular.ttf"; path = "../assets/fonts/Gloria_Hallelujah/GloriaHallelujah-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		DEC71E5C9E8D47AB9A252B78 /* PatrickHand-Regular.ttf */ = {isa = PBXFileReference; name = "PatrickHand-Regular.ttf"; path = "../assets/fonts/Patrick_Hand/PatrickHand-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		5861C1564E584DDBAC5A688C /* GoogleService-Info.plist */ = {isa = PBXFileReference; name = "GoogleService-Info.plist"; path = "diaryapp/GoogleService-Info.plist"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = text.plist.xml; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,6 +52,7 @@
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
+				5861C1564E584DDBAC5A688C /* GoogleService-Info.plist */,
 			);
 			name = diaryapp;
 			sourceTree = "<group>";
@@ -176,6 +179,7 @@
 				DCD066D7D2A04C8786C42F95 /* SpaceMono-Regular.ttf in Resources */,
 				E3D73F26E2C6477795B59772 /* GloriaHallelujah-Regular.ttf in Resources */,
 				452E15470B3E483792A10C5D /* PatrickHand-Regular.ttf in Resources */,
+				B17A0E9A22674A5BA9D1E862 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
