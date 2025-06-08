@@ -15,19 +15,19 @@ import {
   View,
 } from "react-native";
 import { ThemedButton } from "./ThemedButton";
+import { EmotionSelector } from "./EmotionSelector";
 
 interface NewNoteFormProps {
   onClose: () => void; // Function to close the form/modal
   refreshNotes: () => void; // Fetched the notes
 }
 
-// TODO: Update emojis to selector of emotions emojis
-
 export const NewNoteForm = ({ onClose, refreshNotes }: NewNoteFormProps) => {
   const { user } = useAuthProvider();
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
-  const [icon, setIcon] = useState("");
+  const [icon, setIcon] = useState("😐"); // Default to neutral emoji
+  const [emotionLevel, setEmotionLevel] = useState(4); // Default to neutral (4th emotion)
   const [isLoading, setIsLoading] = useState(false);
 
   const backgroundColor = useThemeColor({}, "background");
@@ -35,22 +35,10 @@ export const NewNoteForm = ({ onClose, refreshNotes }: NewNoteFormProps) => {
   const tintColor = useThemeColor({}, "tint");
   const placeholderTextColor = useThemeColor({}, "textDisabled"); // Or another subtle color
 
-  // Function to validate and handle emoji input
-  const handleEmojiChange = (text: string) => {
-    // Regular expression to match emojis
-    // Regex 101: https://regex101.com/r/0anB6Z/1
-    const emojiRegex =
-      /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/g;
-    const emojis = text.match(emojiRegex);
-
-    if (emojis && emojis.length > 0) {
-      // Take only the first emoji
-      setIcon(emojis[0]);
-    } else if (text === "") {
-      // Allow clearing the field
-      setIcon("");
-    }
-    // Ignore non-emoji characters
+  // Handle emotion level change
+  const handleEmotionChange = (level: number, emoji: string) => {
+    setEmotionLevel(level);
+    setIcon(emoji);
   };
 
   const handleSaveNote = async () => {
@@ -72,7 +60,10 @@ export const NewNoteForm = ({ onClose, refreshNotes }: NewNoteFormProps) => {
 
     // Validate icon (should be a single emoji)
     if (!icon.trim()) {
-      Alert.alert("Missing Icon", "Please select an emoji for your note.");
+      Alert.alert(
+        "Missing Emotion",
+        "Please select how you're feeling for your note."
+      );
       return;
     }
 
@@ -96,12 +87,14 @@ export const NewNoteForm = ({ onClose, refreshNotes }: NewNoteFormProps) => {
         usermail: user.email.trim(),
         date: serverTimestamp(),
         icon: icon.trim(),
+        emotionLevel: emotionLevel,
       };
       await addDoc(notesCollectionRef, doc);
       // Alert.alert("Success", "Note saved successfully!");
       setTitle("");
       setText("");
-      setIcon("📝");
+      setIcon("");
+      setEmotionLevel(4); // Reset to neutral
 
       onClose(); // Close the form after saving
       refreshNotes(); // Update the notes after saving new note
@@ -137,22 +130,9 @@ export const NewNoteForm = ({ onClose, refreshNotes }: NewNoteFormProps) => {
         placeholderTextColor={placeholderTextColor}
         maxLength={100}
       />
-      <TextInput
-        style={[
-          styles.input,
-          styles.emojiInput,
-          {
-            backgroundColor: backgroundColor,
-            color: textColor,
-            borderColor: tintColor,
-          },
-        ]}
-        placeholder="📝 Choose an emoji"
-        value={icon}
-        onChangeText={handleEmojiChange}
-        placeholderTextColor={placeholderTextColor}
-        maxLength={2} // Allow for complex emojis
-        textAlign="center"
+      <EmotionSelector
+        selectedLevel={emotionLevel}
+        onLevelChange={handleEmotionChange}
       />
       <TextInput
         style={[
@@ -202,10 +182,6 @@ const styles = StyleSheet.create({
     padding: 15,
     fontSize: 16,
     marginBottom: 15,
-  },
-  emojiInput: {
-    fontSize: 16,
-    textAlign: "center",
   },
   contentInput: {
     minHeight: 150,

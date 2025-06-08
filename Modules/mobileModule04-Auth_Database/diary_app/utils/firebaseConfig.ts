@@ -43,4 +43,5 @@ export interface DiaryNote {
   date: any;
   usermail: string;
   icon: string;
+  emotionLevel: number;
 }

@@ -646,7 +646,7 @@ flowchart LR
     Check -->|Not Authenticated| ShowLogin([Show Login<br/>Page])
 
     ShowLogin --> ChooseProvider{Choose Auth<br/>Provider?}
-    ChooseProvider -->|Google| RequestGoogle[Request Google<br/>Auth]
+
 
     subgraph ExpoAuthSession["Expo Auth Session - Web Browser"]
       direction TB
@@ -659,6 +659,9 @@ flowchart LR
         GithubToken[Fetch GitHub<br/>Access Token]
     end
     GithubOauthCode --> GithubToken
+
+    ChooseProvider -->|Google| RequestGoogle[Request Google<br/>Auth]
+    RequestGoogle --> FirebaseCredential[Create Firebase<br/>Credential]
 
     subgraph FirebaseAuth
       direction TB

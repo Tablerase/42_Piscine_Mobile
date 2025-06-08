@@ -55,9 +55,12 @@ const renderNoteItem = ({
         >
           {item.title}
         </ThemedText>
-        <ThemedText style={styles.noteText}>
-          {item.text.substring(0, 80)}
-          {item.text.length > 80 ? "..." : ""}
+        <ThemedText 
+          style={styles.noteText}
+          numberOfLines={2}
+          ellipsizeMode="tail"
+        >
+          {item.text}
         </ThemedText>
       </View>
 

@@ -1,6 +1,54 @@
 # Diary app
 
+<image src="./assets/images/icon.png" align="right" width="200" height="200">
+
+This is a simple diary app that allows users to create, read and delete diary notes. The app uses Firebase for authentication and Firestore for the database.
+
+## Features
+
+- User authentication with Firebase
+- Create, read and delete diary notes
+- Notes are stored in Firestore
+
+## Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone
+   ```
+
+   ```bash
+   cd diary_app
+   ```
+
+2. Install dependencies:
+   ```bash
+    npm install
+   ```
+3. Set up Firebase:
+   - Create a Firebase project in the [Firebase Console](https://console.firebase.google.com/).
+   - Enable Firestore and Authentication (Google sign-in method, for example).
+   - Create a web app in your Firebase project to get the Firebase configuration.
+   - Create an android app in your Firebase project to get the Firebase configuration for Android.
+     - Download the `google-services.json` file and place it in the `root` directory.
+4. Configure the app:
+
+   - Use the `.env.example` file to create a `.env` file with your Firebase configuration.
+
+5. Run the app:
+   ```bash
+   npx expo run:android
+   ```
+   ```bash
+   npx expo start --tunnel --dev-client
+   ```
+6. Open the app on your Android device or emulator.
+
 ## Firebase
+
+- [Firebase Console](https://console.firebase.google.com/)
+- [API Google](https://console.cloud.google.com/)
 
 Database Firestore rules:
 
@@ -35,25 +83,25 @@ service cloud.firestore {
         // 1. Core fields (title, text, icon) maintain their integrity (type, size).
         // 2. The 'usermail' field cannot be changed.
         // 3. Only 'title', 'text', 'icon', fields can be part of an update payload.
-        allow update: if request.auth != null && request.auth.uid == userId &&
-                         // Validate the state of core fields after the update
-                         request.resource.data.title is string &&
-                         request.resource.data.title.size() > 0 &&
-                         request.resource.data.title.size() <= 100 &&
-                         request.resource.data.text is string &&
-                         request.resource.data.text.size() > 0 &&
-                         request.resource.data.text.size() <= 2500 &&
-                         request.resource.data.icon is string &&
-                         request.resource.data.icon.size() > 0 &&
-                         request.resource.data.icon.size() <= 10 &&
-                         // Ensure usermail is still a string (it was set at creation)
-                         request.resource.data.usermail is string &&
-                         // Crucially, usermail cannot be changed from its original value
-                         request.resource.data.usermail == resource.data.usermail &&
-                         // Restrict which fields can be part of an update payload.
-                         // 'usermail' is not in this list, so it cannot be in the update payload.
-                         // This also means other existing or new fields not listed here cannot be updated through this rule.
-                         request.data.keys().hasOnly(['title', 'text', 'icon']);
+        // allow update: if request.auth != null && request.auth.uid == userId &&
+        //                  // Validate the state of core fields after the update
+        //                  request.resource.data.title is string &&
+        //                  request.resource.data.title.size() > 0 &&
+        //                  request.resource.data.title.size() <= 100 &&
+        //                  request.resource.data.text is string &&
+        //                  request.resource.data.text.size() > 0 &&
+        //                  request.resource.data.text.size() <= 2500 &&
+        //                  request.resource.data.icon is string &&
+        //                  request.resource.data.icon.size() > 0 &&
+        //                  request.resource.data.icon.size() <= 10 &&
+        //                  // Ensure usermail is still a string (it was set at creation)
+        //                  request.resource.data.usermail is string &&
+        //                  // Crucially, usermail cannot be changed from its original value
+        //                  request.resource.data.usermail == resource.data.usermail &&
+        //                  // Restrict which fields can be part of an update payload.
+        //                  // 'usermail' is not in this list, so it cannot be in the update payload.
+        //                  // This also means other existing or new fields not listed here cannot be updated through this rule.
+        //                  request.data.keys().hasOnly(['title', 'text', 'icon']);
 
         // Allow delete if the user is authenticated and owns the note.
         allow delete: if request.auth != null && request.auth.uid == userId;
@@ -71,6 +119,9 @@ service cloud.firestore {
                          request.resource.data.icon is string &&
                          request.resource.data.icon.size() > 0 &&
                          request.resource.data.icon.size() <= 10 &&
+                         request.resource.data.emotionLevel is number &&
+                         request.resource.data.emotionLevel > 0 &&
+                         request.resource.data.emotionLevel < 8 &&
                          // request.resource.data.date is timestamp &&
                          request.resource.data.usermail is string &&
                          request.resource.data.usermail.size() > 0
@@ -87,3 +138,4 @@ service cloud.firestore {
 ## Diary info
 
 - https://www.wikihow.com/Write-a-Diary
+- [Regex for emojis](https://regex101.com/r/0anB6Z/1)

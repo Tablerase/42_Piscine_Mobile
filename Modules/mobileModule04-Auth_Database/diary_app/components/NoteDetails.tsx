@@ -75,7 +75,7 @@ export const NoteDetails = ({
         </ThemedText>
       </View>
 
-      {note.text.length > 200 ? (
+      {note.text.length > 500 ? (
         <ScrollView>
           <ThemedText>{note.text}</ThemedText>
         </ScrollView>
