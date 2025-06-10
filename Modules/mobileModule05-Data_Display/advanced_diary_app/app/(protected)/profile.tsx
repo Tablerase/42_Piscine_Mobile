@@ -1,6 +1,5 @@
 import { DiaryList } from "@/components/DiaryList";
 import { FeelingsAnalyze } from "@/components/FeelingsAnalyze";
-import { ModalContainer } from "@/components/ModalContainer";
 import { ThemedImageBackground } from "@/components/ThemedImageBackground";
 import { UserCard } from "@/components/UserCard";
 import { useDiaryNotes } from "@/contexts/DiaryNotesContext";
@@ -24,7 +23,6 @@ export default function Profile() {
           />
           <FeelingsAnalyze />
         </View>
-        <ModalContainer />
       </SafeAreaView>
     </ThemedImageBackground>
   );

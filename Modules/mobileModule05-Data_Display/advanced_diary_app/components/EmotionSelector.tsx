@@ -8,15 +8,15 @@ interface EmotionSelectorProps {
   onLevelChange: (level: number, emoji: string) => void;
 }
 
-// 7 basic emotions with corresponding emojis
+// 7 basic emotions with corresponding emojis and colors
 export const EMOTION_LEVELS = [
-  { level: 1, emoji: "😢", label: "Sad" },
-  { level: 2, emoji: "😨", label: "Fear" },
-  { level: 3, emoji: "😠", label: "Anger" },
-  { level: 4, emoji: "😐", label: "Neutral" },
-  { level: 5, emoji: "😊", label: "Joy" },
-  { level: 6, emoji: "😮", label: "Surprise" },
-  { level: 7, emoji: "🤢", label: "Disgust" },
+  { level: 1, emoji: "😢", label: "Sad", color: "#2196F3" }, // blue
+  { level: 2, emoji: "😨", label: "Fear", color: "#FF5722" }, // deep orange
+  { level: 3, emoji: "😠", label: "Anger", color: "#F44336" }, // red
+  { level: 4, emoji: "😐", label: "Neutral", color: "#607D8B" }, // blue grey
+  { level: 5, emoji: "😊", label: "Joy", color: "#4CAF50" }, // green
+  { level: 6, emoji: "😮", label: "Surprise", color: "#FF9800" }, // orange
+  { level: 7, emoji: "🤢", label: "Disgust", color: "#9C27B0" }, // purple
 ];
 
 export const EmotionSelector = ({

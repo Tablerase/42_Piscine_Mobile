@@ -1,3 +1,4 @@
+import { ModalContainer } from "@/components/ModalContainer";
 import { DiaryNotesProvider } from "@/contexts/DiaryNotesContext";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { useAuthProvider } from "@/utils/AuthProvider";
@@ -36,15 +37,16 @@ export default function RootLayout() {
           }}
         />
         <Tabs.Screen
-          name="calendar"
+          name="agenda"
           options={{
-            title: "Calendar",
+            title: "Agenda",
             tabBarIcon: ({ color }) => (
               <Ionicons size={25} color={color} name="calendar" />
             ),
           }}
         />
       </Tabs>
+      <ModalContainer />
     </DiaryNotesProvider>
   );
 }

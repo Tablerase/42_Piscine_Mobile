@@ -13,6 +13,7 @@ import {
 import { ThemedButtonIcon } from "./ThemedButtonIcon";
 import { ThemedText } from "./ThemedText";
 import { useModal } from "@/contexts/ModalContext";
+import { EMOTION_LEVELS } from "./EmotionSelector";
 
 const renderNoteItem = ({
   item,
@@ -21,10 +22,18 @@ const renderNoteItem = ({
   item: DiaryNote;
   openReadModal: (note: DiaryNote) => void;
 }) => {
+  const emotionColor =
+    EMOTION_LEVELS.find((e) => e.level === item.emotionLevel)?.color ?? "";
+
   const borderBottomColor = theme.colors.neutral.light;
   return (
     <TouchableOpacity
-      style={[styles.noteItem, { borderBottomColor: borderBottomColor }]}
+      style={[
+        styles.noteItem,
+        {
+          borderBottomColor: borderBottomColor,
+        },
+      ]}
       onPress={() => openReadModal(item)}
     >
       {/* Icon on the left */}

@@ -591,6 +591,11 @@ To store data in a React Native application, you can use various methods dependi
 - [List of Storage of up to date Options](https://reactnative.directory/?search=storage&order=quality)
 - https://github.com/oblador/react-native-keychain
 
+### Calendar
+
+- [React Native - Calendar by Wix](https://github.com/wix/react-native-calendars)
+  - Documentation: https://wix.github.io/react-native-calendars/docs/Intro
+
 ## Testing
 
 ### Testing with Jest
