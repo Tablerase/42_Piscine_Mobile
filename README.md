@@ -1,5 +1,33 @@
 # Piscine Mobile
 
+## Apps implemented in Piscine Mobile
+
+<img src='./Modules/mobileModule05-Data_Display/advanced_diary_app/assets/images/icon.png' alt='Diary Note application' width='300' align="right">
+
+- [Diary Note application](./Modules/mobileModule05-Data_Display/advanced_diary_app/):
+
+  - A diary note application to allow users to create and delete notes, with a calendar view to display the notes by date.
+  - It includes features like:
+    - Creating and deleting notes
+    - Calendar view to display notes by date
+    - Profile view with last notes and mood recap
+    - Sign-in with Google and GitHub
+    - Emotion picker for mood selection
+
+- [Weather App](./Modules/mobileModule04-Data_Storage/weather_app/):
+
+  - A weather application that allows users to search for weather information by city.
+  - It includes features like:
+    <img src='./Modules/mobileModule03-Design/advanced_weather_app/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png' alt='Weather App' width='300' align="right">
+    - Search functionality for cities or current location
+    - Display of current weather conditions
+    - Display of hourly weather forecast
+    - Display of weather forecast for the next 7 days
+    - Integration with Open Meteo API for weather data
+
+- [Simple calculator app](./Modules/mobileModule00-Base/calculator_app/):
+  - A simple calculator application that allows users to perform basic arithmetic operations.
+
 ## Mobile
 
 - [AWS - Mobile App Dev](https://aws.amazon.com/mobile/mobile-application-development/)

@@ -10,7 +10,9 @@ import { EMOTION_LEVELS } from "@/components/EmotionSelector";
 
 export default function Agenda() {
   const { allNotes } = useDiaryNotes();
-  const [selectedDate, setSelectedDate] = useState<string>("");
+  const [selectedDate, setSelectedDate] = useState<string>(
+    new Date().toISOString().split("T")[0]
+  );
   const [dataIsLoading, setDataIsLoading] = useState<boolean>(true);
 
   // Theme colors

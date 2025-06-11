@@ -71,6 +71,7 @@ export const FeelingsAnalyze = () => {
       </ThemedText>
 
       {/* Display emotions in grid layout like EmotionSelector */}
+      {/* TODO: Add emotion color for border here */}
       <View style={styles.emotionGrid}>
         {Object.values(emotionAnalysis).map((emotion) => (
           <View
