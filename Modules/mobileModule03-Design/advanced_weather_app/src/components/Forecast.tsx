@@ -5,6 +5,7 @@ import {ActivityIndicator, Linking, StyleSheet, Text, View} from 'react-native';
 import {CurrentForecast} from './CurrentForecast';
 import {TodayForecast} from './TodayForecast';
 import {WeeklyForecast} from './WeeklyForecast';
+import {useEffect, useState} from 'react';
 
 const WeatherInfo = () => {
   const {location, page} = useAppContext();
@@ -125,9 +126,37 @@ const GeolocationErrorItem = () => {
 
 export const Forecast = () => {
   const {location, locationPerm} = useAppContext();
+  const [showTimeoutError, setShowTimeoutError] = useState(false);
+
+  useEffect(() => {
+    // Set a timeout to show connection error if location is not loaded
+    const timer = setTimeout(() => {
+      if (!location.coords && !location.name) {
+        setShowTimeoutError(true);
+      }
+    }, 5000);
+
+    // Clear timeout if location is loaded
+    if (location.coords || location.name) {
+      setShowTimeoutError(false);
+      clearTimeout(timer);
+    }
+
+    return () => clearTimeout(timer);
+  }, [location.coords, location.name]);
 
   if (locationPerm === false && !location.name) {
     return <GeolocationErrorItem />;
+  }
+
+  if (showTimeoutError) {
+    return (
+      <View style={styles.forecast}>
+        <Text style={styles.noPermissionText}>
+          Service connection lost, please check your internet connection
+        </Text>
+      </View>
+    );
   }
 
   return location.coords ? (
@@ -136,7 +165,6 @@ export const Forecast = () => {
     <ActivityIndicator color={theme.colors.secondary} />
   );
 };
-
 const styles = StyleSheet.create({
   forecast: {
     alignItems: 'center',

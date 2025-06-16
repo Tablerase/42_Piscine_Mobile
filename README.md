@@ -676,8 +676,13 @@ To store data in a React Native application, you can use various methods dependi
 ### Geolocation/Geocode API
 
 - [Open Meteo](https://open-meteo.com/en/docs):
+
   - [Non commercial - Open Meteo - Geocoding API](https://open-meteo.com/en/docs/geocoding-api#api_documentation)
   - [Non commercial - Open Meteo - Weather API](https://open-meteo.com/en/docs)
+
+- [Goople - Geocoding Setup](https://developers.google.com/maps/documentation/geocoding/cloud-setup)
+  - https://developers.google.com/maps/documentation/geocoding/start#reverse
+  - https://console.cloud.google.com/google/maps-apis/
 
 ## Authentication
 

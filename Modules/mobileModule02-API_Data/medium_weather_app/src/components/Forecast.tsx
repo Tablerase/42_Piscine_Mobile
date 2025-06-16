@@ -1,6 +1,7 @@
 import {Page, useAppContext} from '@contexts/AppContext';
 import {useWeatherData} from '@hooks/useWeatherData';
 import {theme} from '@styles/theme';
+import {useEffect, useState} from 'react';
 import {ActivityIndicator, Linking, StyleSheet, Text, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 
@@ -142,23 +143,29 @@ const WeatherInfo = () => {
   }
 
   let header;
-  let place;
-  if (
-    !location.name &&
-    location.coords?.longitude &&
-    location.coords?.latitude
-  ) {
-    place = [
-      String(location.coords?.latitude ?? 'Unknown'),
-      String(location.coords?.longitude ?? 'Unknown'),
-    ];
-  } else {
-    place = [
-      String(location.name || 'Unknown'),
-      String(location.region || 'Unknown'),
-      String(location.country || 'Unknown'),
-    ];
-  }
+  const [place, setPlace] = useState<string[]>([]);
+
+  useEffect(() => {
+    let newPlace;
+    if (
+      !location.name &&
+      location.coords?.longitude &&
+      location.coords?.latitude
+    ) {
+      newPlace = [
+        String(location.coords?.latitude ?? 'Unknown'),
+        String(location.coords?.longitude ?? 'Unknown'),
+      ];
+    } else {
+      newPlace = [
+        String(location.name || 'Unknown'),
+        String(location.region || 'Unknown'),
+        String(location.country || 'Unknown'),
+      ];
+    }
+    setPlace(newPlace);
+  }, [location]);
+
   const colors = ['#FFD700', '#87CEEB', '#FF69B4'];
   header = (
     <View style={styles.forecastHeaderObj}>
@@ -206,9 +213,37 @@ const GeolocationErrorItem = () => {
 
 export const Forecast = () => {
   const {location, locationPerm} = useAppContext();
+  const [showTimeoutError, setShowTimeoutError] = useState(false);
+
+  useEffect(() => {
+    // Set a timeout to show connection error if location is not loaded
+    const timer = setTimeout(() => {
+      if (!location.coords && !location.name) {
+        setShowTimeoutError(true);
+      }
+    }, 5000);
+
+    // Clear timeout if location is loaded
+    if (location.coords || location.name) {
+      setShowTimeoutError(false);
+      clearTimeout(timer);
+    }
+
+    return () => clearTimeout(timer);
+  }, [location.coords, location.name]);
 
   if (locationPerm === false && !location.name) {
     return <GeolocationErrorItem />;
+  }
+
+  if (showTimeoutError) {
+    return (
+      <View style={styles.forecast}>
+        <Text style={styles.noPermissionText}>
+          Service connection lost, please check your internet connection
+        </Text>
+      </View>
+    );
   }
 
   return location.coords ? (
