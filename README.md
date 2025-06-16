@@ -574,6 +574,45 @@ npx uri-scheme list
 npx expo-router-sitemap
 ```
 
+#### Intents Filter
+
+https://developer.android.com/guide/components/intents-filters
+
+Intents are used in Android to allow applications to communicate with each other. They can be used to start activities, services, or broadcast receivers. In the context of deep linking, intents are used to handle incoming links and navigate to the appropriate screen within the app.
+To set up deep linking in a React Native application, you need to define an intent filter in the `AndroidManifest.xml` file. This filter specifies the URL scheme and host that your app can handle. Here is an example of how to set up an intent filter for deep linking:
+
+```xml
+<activity
+    android:name=".MainActivity"
+    android:label="@string/app_name"
+    android:exported="true">
+    <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <data
+            android:scheme="your_app"
+            android:host="your_redirect" />
+    </intent-filter>
+</activity>
+```
+
+This intent filter allows your app to handle links with the scheme `your_app` and the host `your_redirect`. When a user clicks on a link that matches this pattern, Android will launch your app and pass the link data to it.
+
+- Type of action:
+  - `android.intent.action.VIEW`: This action is used to view data, such as a web page or an image.
+  - `android.intent.action.MAIN`: This action is used to start the main activity of your app.
+  - ...
+- Type of category:
+  - `android.intent.category.DEFAULT`: This category is used for activities that can be launched by default.
+  - `android.intent.category.BROWSABLE`: This category allows your app to be launched from a web browser or other applications.
+  - `android.intent.category.LAUNCHER`: This category is used for the main entry point of your app, allowing it to be launched from the home screen or app drawer.
+  - ...
+- Type of data:
+  - `android:scheme`: This attribute specifies the URL scheme that your app can handle, such as `http`, `https`, or a custom scheme like `your_app`.
+  - `android:host`: This attribute specifies the host part of the URL that your app can handle, such as `your_redirect`.
+  - ...
+
 ### Building
 
 #### Android

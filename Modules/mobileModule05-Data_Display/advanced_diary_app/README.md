@@ -10,13 +10,13 @@ This is a simple diary app that allows users to create, read and delete diary no
 - Create, read and delete diary notes
 - Notes are stored in Firestore
 
-<image src='./media/AppDemo1.png' width='150'>
-<image src='./media/AppDemo2.png' width='150'>
-<image src='./media/AppDemo3.png' width='150'>
-<image src='./media/AppDemo4.png' width='150'>
-<image src='./media/AppDemo5.png' width='150'>
-<image src='./media/AppDemo6.png' width='150'>
-<image src='./media/AppDemo7.png' width='150'>
+<div align="center">
+   <image src='./media/AppDemo1.png' width='300' >
+   <image src='./media/AppDemo2.png' width='300' >
+   <image src='./media/AppDemo5.png' width='200' >
+   <image src='./media/AppDemo6.png' width='200' >
+   <image src='./media/AppDemo7.png' width='200' >
+</div>
 
 ## Installation
 
