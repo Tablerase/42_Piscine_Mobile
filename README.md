@@ -13,6 +13,8 @@
     - Profile view with last notes and mood recap
     - Sign-in with Google and GitHub
     - Emotion picker for mood selection
+    - Firestore database for storing notes, Firebase authentication for user management
+  - API: Firebase Firestore, Firebase Authentication, Google OAuth, GitHub OAuth
 
 - [Weather App](./Modules/mobileModule04-Data_Storage/weather_app/):
 
@@ -24,6 +26,7 @@
     - Display of hourly weather forecast
     - Display of weather forecast for the next 7 days
     - Integration with Open Meteo API for weather data
+  - API: Open Meteo Geocoding API and Weather API, Google Reverse Geocoding API
 
 - [Simple calculator app](./Modules/mobileModule00-Base/calculator_app/):
   - A simple calculator application that allows users to perform basic arithmetic operations.

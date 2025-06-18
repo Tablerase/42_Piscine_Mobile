@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const CityButton = (city: GeocodingLocation) => {
@@ -62,7 +63,7 @@ const CityButton = (city: GeocodingLocation) => {
 };
 
 export const SearchList = () => {
-  const {cityField} = useAppContext();
+  const {cityField, direction} = useAppContext();
   const {cities, loading, error} = useCitiesList(cityField);
 
   if (loading) {
@@ -86,22 +87,31 @@ export const SearchList = () => {
     );
   }
 
+  let citiesButtons = cities.map((city: GeocodingLocation, index: number) => (
+    <CityButton
+      key={`${
+        city.id ??
+        `${city.name.replace(/[^a-z0-9]/gi, '')}-${city.admin1?.replace(
+          /[^a-z0-9]/gi,
+          '',
+        )}-${city.country.replace(/[^a-z0-9]/gi, '')}-${index}`
+      }`}
+      {...city}
+    />
+  ));
+
   return (
     <>
-      <View style={styles.container}>
-        {cities.map((city: GeocodingLocation, index: number) => (
-          <CityButton
-            key={`${
-              city.id ??
-              `${city.name.replace(/[^a-z0-9]/gi, '')}-${city.admin1?.replace(
-                /[^a-z0-9]/gi,
-                '',
-              )}-${city.country.replace(/[^a-z0-9]/gi, '')}-${index}`
-            }`}
-            {...city}
-          />
-        ))}
-      </View>
+      {direction === 'column' ? (
+        <View style={styles.container}>{citiesButtons}</View>
+      ) : (
+        <ScrollView
+          style={styles.containerScrollView}
+          contentContainerStyle={styles.scrollViewContent}
+          showsVerticalScrollIndicator={false}>
+          {citiesButtons}
+        </ScrollView>
+      )}
     </>
   );
 };
@@ -111,6 +121,15 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     margin: 5,
     gap: 5,
+  },
+  containerScrollView: {
+    alignContent: 'center',
+    margin: 10,
+    paddingBottom: 40,
+  },
+  scrollViewContent: {
+    gap: 5,
+    paddingBottom: 60,
   },
   containerError: {
     justifyContent: 'center',
@@ -127,7 +146,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     flexDirection: 'row',
     alignItems: 'center',
+    alignContent: 'center',
     flexWrap: 'wrap',
+    minHeight: 60,
   },
   CityButtonIcon: {
     padding: 5,
