@@ -783,4 +783,4 @@ cd android
   - https://developers.google.com/identity/protocols/oauth2/native-app?authuser=0
   - https://react-native-google-signin.github.io/docs/setting-up/expo#expo-and-firebase-authentication
   - https://react-native-google-signin.github.io/docs/setting-up/android
-- Github app: https://github.com/settings/applications
+- Github Oauth app: https://github.com/settings/developers

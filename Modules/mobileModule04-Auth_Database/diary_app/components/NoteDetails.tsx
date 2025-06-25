@@ -68,7 +68,9 @@ export const NoteDetails = ({
               {note.icon || "📝"}
             </Text>
           </View>
-          <ThemedText type="title">{note.title}</ThemedText>
+          <ThemedText type="title" style={{ flexShrink: 1 }}>
+            {note.title}
+          </ThemedText>
         </View>
         <ThemedText type="caption" style={{ textAlign: "center" }}>
           {new Date(note.date.seconds * 1000).toLocaleDateString()}
@@ -112,6 +114,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    maxWidth: "90%",
   },
   iconContainer: {
     width: 50,
