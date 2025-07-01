@@ -43,6 +43,13 @@ This is a simple diary app that allows users to create, read and delete diary no
 4. Configure the app:
 
    - Use the `.env.example` file to create a `.env` file with your Firebase configuration.
+     - Fill in the necessary environment variables with your Firebase project details.
+   - Generate assets/fonts/services files for Android:
+     - Run the following command to generate the necessary assets and services files:
+       ```bash
+       npx expo prebuild
+       ```
+     - This will create the `android/app/src/main/res` directory with the necessary files.
 
 5. Run the app:
    ```bash

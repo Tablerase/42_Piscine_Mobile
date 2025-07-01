@@ -19,6 +19,7 @@ import { ThemedText } from "./ThemedText";
 interface NoteDetailsProps {
   note: DiaryNote;
   onClose: () => void; // Function to close the form/modal
+  refreshNotes: () => void; // Fetched the notes
 }
 
 export const NoteDetails = ({ note, onClose }: NoteDetailsProps) => {
@@ -62,7 +63,9 @@ export const NoteDetails = ({ note, onClose }: NoteDetailsProps) => {
               {note.icon || "📝"}
             </Text>
           </View>
-          <ThemedText type="title">{note.title}</ThemedText>
+          <ThemedText type="title" style={{ flexShrink: 1 }}>
+            {note.title}
+          </ThemedText>
         </View>
         <ThemedText type="caption" style={{ textAlign: "center" }}>
           {new Date(note.date.seconds * 1000).toLocaleDateString()}
@@ -106,6 +109,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    maxWidth: "90%",
   },
   iconContainer: {
     width: 50,

@@ -38,6 +38,7 @@ export default function Agenda() {
       allNotes.forEach((note) => {
         try {
           // Ensure consistent date formatting
+          if (!note.date || !note.date.seconds) return;
           const noteDate = new Date(note.date.seconds * 1000);
           if (isNaN(noteDate.getTime())) return; // Skip invalid dates
 
@@ -57,7 +58,7 @@ export default function Agenda() {
             };
           }
         } catch (error) {
-          console.warn("Invalid date in note:", note.date);
+          console.warn("Invalid date in note:", note.date, error);
         }
       });
     }
@@ -81,13 +82,14 @@ export default function Agenda() {
 
     return allNotes.filter((note) => {
       try {
+        if (!note.date || !note.date.seconds) return false;
         const noteDate = new Date(note.date.seconds * 1000);
         if (isNaN(noteDate.getTime())) return false; // Skip invalid dates
 
         const dateKey = noteDate.toISOString().split("T")[0];
         return dateKey === selectedDate;
       } catch (error) {
-        console.warn("Invalid date in note filter:", note.date);
+        console.warn("Invalid date in note filter:", note.date, error);
         return false;
       }
     });
