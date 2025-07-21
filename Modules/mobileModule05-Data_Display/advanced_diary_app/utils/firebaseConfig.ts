@@ -4,15 +4,19 @@ import { getFirestore } from "firebase/firestore";
 
 // ! Issues with persistency Metro/Expo and Firebase - not resolved at time of commit: https://github.com/firebase/firebase-js-sdk/issues/8798
 // ! Suppress Firebase Auth AsyncStorage warning
+// ! WebChannelConnection RPC error - common during dev (network, hot reload, metro/expo connections)
 const originalWarn = console.warn;
 console.warn = (...args) => {
   const message = String(args[0] || "");
-  if (message.includes("@firebase/auth") || message.includes("AsyncStorage")) {
+  if (
+    message.includes("@firebase/auth") ||
+    message.includes("AsyncStorage") ||
+    message.includes("RPC 'Listen'")
+  ) {
     return;
   }
   originalWarn(...args);
 };
-
 
 // Refresh token: expires only at user deleted or disabled
 // Id token: last for an hour
